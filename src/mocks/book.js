@@ -17,5 +17,7 @@ export function bookFactory() {
     pageQuantity: faker.datatype.number({ min: 80, max: 1200 }),
     isPaid: faker.datatype.boolean(),
     description: faker.lorem.paragraph(),
+    bookSrc: null,
+    rating: faker.datatype.number({ min: 1, max: 5 }),
   };
 }

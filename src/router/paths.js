@@ -6,6 +6,7 @@ const paths = {
   myBooks: '/my-books',
   profile: '/profile',
   book: '/book/:id',
+  story: '/story/:id',
 };
 
 export default paths;

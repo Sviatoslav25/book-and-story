@@ -6,6 +6,7 @@ import Book from '../pages/Book';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import SignUp from '../pages/SignUp';
+import Story from '../pages/Story';
 import AuthManager from '../services/AuthManager';
 import paths from './paths';
 
@@ -37,6 +38,11 @@ const appRouts = [
     path: paths.book,
     exact: true,
     Component: Book,
+  },
+  {
+    path: paths.story,
+    exact: true,
+    Component: Story,
   },
 ];
 
