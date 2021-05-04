@@ -7,6 +7,8 @@
     "linebreak-style": 0,
     "react/prop-types": 0,
     "no-unused-vars": 1,
-    "import/newline-after-import": 1
+    "import/newline-after-import": 1,
+    "no-use-before-define": ["error", { "functions": false, "classes": false, "variables": true }],
+    "no-underscore-dangle": 0
   }
 }

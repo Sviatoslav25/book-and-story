@@ -20,13 +20,22 @@ export default function Login() {
   };
 
   const isValidEmail = (e) => {
-    const result = EmailValidator(e.target.value);
-    setIsValidatedEmail(result);
+    setIsValidatedEmail(EmailValidator(e.target.value));
   };
 
   const isValidPassword = (e) => {
-    const result = PasswordValidator(e.target.value);
-    setIsValidatedPassword(result);
+    setIsValidatedPassword(PasswordValidator(e.target.value));
+  };
+
+  const Submit = () => {
+    const emailVerificationResult = EmailValidator(email);
+    const passwordVerificationResult = PasswordValidator(password);
+    if (emailVerificationResult && passwordVerificationResult) {
+      AuthManager.login();
+    } else {
+      setIsValidatedEmail(emailVerificationResult);
+      setIsValidatedPassword(passwordVerificationResult);
+    }
   };
 
   return (
@@ -37,11 +46,7 @@ export default function Login() {
             <Link to={paths.signUp} className="float-right">
               <Button variant="outline-primary">Sing up</Button>
             </Link>
-            <Form
-              onSubmit={() => {
-                AuthManager.login();
-              }}
-            >
+            <Form onSubmit={Submit}>
               <Card.Title>Sign in</Card.Title>
               <Form.Group controlId="formBasicEmail">
                 <Form.Label>Email address</Form.Label>

@@ -5,6 +5,7 @@ const paths = {
   myStories: '/my-stories',
   myBooks: '/my-books',
   profile: '/profile',
+  book: '/book/:id',
 };
 
 export default paths;

@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Route, BrowserRouter as Router, Switch, Redirect } from 'react-router-dom';
 import AppLayout from '../components/layouts/AppLayout';
 import AuthLayout from '../components/layouts/AuthLayout';
+import Book from '../pages/Book';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import SignUp from '../pages/SignUp';
@@ -31,6 +32,11 @@ const appRouts = [
     path: paths.myBooks,
     exact: true,
     Component: Home,
+  },
+  {
+    path: paths.book,
+    exact: true,
+    Component: Book,
   },
 ];
 
