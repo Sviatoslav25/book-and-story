@@ -28,14 +28,7 @@ export default function Login() {
   };
 
   const Submit = () => {
-    const emailVerificationResult = EmailValidator(email);
-    const passwordVerificationResult = PasswordValidator(password);
-    if (emailVerificationResult && passwordVerificationResult) {
-      AuthManager.login();
-    } else {
-      setIsValidatedEmail(emailVerificationResult);
-      setIsValidatedPassword(passwordVerificationResult);
-    }
+    AuthManager.login();
   };
 
   return (
@@ -71,7 +64,7 @@ export default function Login() {
                 />
               </Form.Group>
               <Button
-                disabled={!isValidatedEmail || !isValidatedPassword || false}
+                disabled={!isValidatedEmail || !isValidatedPassword || !email || !password || false}
                 variant="primary"
                 type="submit"
                 block
