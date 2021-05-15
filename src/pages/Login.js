@@ -12,10 +12,16 @@ export default function Login() {
   const [isValidatedPassword, setIsValidatedPassword] = useState(true);
 
   const onChangeEmail = (e) => {
+    if (!isValidatedEmail) {
+      setIsValidatedEmail(EmailValidator(e.target.value));
+    }
     setEmail(e.target.value);
   };
 
   const onChangePassword = (e) => {
+    if (!isValidatedPassword) {
+      setIsValidatedPassword(PasswordValidator(e.target.value));
+    }
     setPassword(e.target.value);
   };
 

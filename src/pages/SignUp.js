@@ -14,14 +14,23 @@ export default function SingUp() {
   const [isRepeatPasswordEqualPassword, setIsRepeatPasswordEqualPassword] = useState(true);
 
   const onChangeEmail = (e) => {
+    if (!isValidatedEmail) {
+      setIsValidatedEmail(EmailValidator(e.target.value));
+    }
     setEmail(e.target.value);
   };
 
   const onChangePassword = (e) => {
+    if (!isValidatedPassword) {
+      setIsValidatedPassword(PasswordValidator(e.target.value));
+    }
     setPassword(e.target.value);
   };
 
   const onChangeRepeatPassword = (e) => {
+    if (!isRepeatPasswordEqualPassword) {
+      setIsRepeatPasswordEqualPassword(password === e.target.value);
+    }
     setRepeatPassword(e.target.value);
   };
 

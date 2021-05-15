@@ -1,5 +1,5 @@
-import { bookListFactory } from '../mocks/book';
-import { storyListFactory } from '../mocks/story';
+import { bookFactory, bookListFactory } from '../mocks/book';
+import { storyFactory, storyListFactory } from '../mocks/story';
 
 class MockDataService {
   constructor() {
@@ -15,12 +15,20 @@ class MockDataService {
     return this.bookList.find((book) => book._id === id);
   }
 
-  getStory() {
+  getStories() {
     return this.storyList;
   }
 
   getStoryById(id) {
     return this.storyList.find((story) => story._id === id);
+  }
+
+  createStory() {
+    return storyFactory();
+  }
+
+  createBook() {
+    return bookFactory();
   }
 }
 
