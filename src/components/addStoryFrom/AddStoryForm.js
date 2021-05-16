@@ -44,7 +44,7 @@ export default function AddStoryForm() {
   return (
     <Form onSubmit={submit}>
       <Card.Title>Add story</Card.Title>
-      <InputCreator controlId="name" labelText="Book name" value={storyData.name} onChange={onChangeName} />
+      <InputCreator controlId="name" labelText="Story name" value={storyData.name} onChange={onChangeName} />
       <InputCreator controlId="date" labelText="Date" value={storyData.date} onChange={onChangeDate} />
       <InputCreator controlId="genre" labelText="Genre" value={storyData.genre} onChange={onChangeGenre} />
       <Form.Group controlId="shortDescription">
