@@ -46,7 +46,7 @@ export default function AddBookForm() {
   };
 
   const onChangeIsPaid = (e) => {
-    setBookData({ ...bookData, isPaid: e.target.value });
+    setBookData({ ...bookData, isPaid: e.target.checked });
   };
 
   const onChangePrice = (e) => {
@@ -85,11 +85,12 @@ export default function AddBookForm() {
         labelText="Page quantity"
         value={bookData.pageQuantity}
         onChange={onChangeQuantity}
+        type="number"
       />
       <Form.Group controlId="price">
         <Form.Label>Price</Form.Label>
         <Form.Control readOnly={!bookData.isPaid} type="number" value={bookData.price} onChange={onChangePrice} />
-        <Form.Check value={bookData.isPaid} type="checkbox" label="Paid" onChange={onChangeIsPaid} />
+        <Form.Check checked={bookData.isPaid} type="checkbox" label="Paid" onChange={onChangeIsPaid} />
       </Form.Group>
       <Form.Group controlId="description">
         <Form.Label>Description</Form.Label>
