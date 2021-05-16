@@ -1,28 +1,28 @@
 import React, { useState } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+
 import BookCard from '../components/book/BookCard';
 import StoryCard from '../components/story/StoryCard';
 import MockDataService from '../services/MockDataService';
 import homeStyle from '../pagesStyle/Home.module.scss';
+import paths from '../router/paths';
 
 export default function Home() {
   const [isBook, setIsBook] = useState(true);
-  const [books, setBooks] = useState([]);
-  const [stories, setStories] = useState([]);
-
-  // const bookList = MockDataService.getBooks();
-  // const storyList = MockDataService.getStories();
+  const [books, setBooks] = useState(MockDataService.getBooks());
+  const [stories, setStories] = useState(MockDataService.getStories());
 
   const changeView = () => {
     setIsBook(!isBook);
   };
 
-  const addBook = () => {
+  const addBookRandomData = () => {
     const book = MockDataService.createBook();
     setBooks([book, ...books]);
   };
 
-  const addStory = () => {
+  const addStoryRandomData = () => {
     const story = MockDataService.createStory();
     setStories([story, ...stories]);
   };
@@ -33,13 +33,22 @@ export default function Home() {
         {isBook ? 'Stories' : 'Books'}
       </Button>
       {isBook ? (
-        <Button className={homeStyle.addButton} onClick={addBook}>
-          addBook
+        <Button className={homeStyle.addButton} onClick={addBookRandomData}>
+          addBook(Random Data)
         </Button>
       ) : (
-        <Button className={homeStyle.addButton} onClick={addStory}>
-          addStory
+        <Button className={homeStyle.addButton} onClick={addStoryRandomData}>
+          addStory(Random Data)
         </Button>
+      )}
+      {isBook ? (
+        <Link to={paths.addBook}>
+          <Button className={homeStyle.addButton}>addBook</Button>
+        </Link>
+      ) : (
+        <Link to={paths.addStory}>
+          <Button className={homeStyle.addButton}>addStory</Button>
+        </Link>
       )}
       <Row>
         {isBook

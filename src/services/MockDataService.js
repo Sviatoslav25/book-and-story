@@ -1,10 +1,10 @@
-import { bookFactory, bookListFactory } from '../mocks/book';
-import { storyFactory, storyListFactory } from '../mocks/story';
+import { bookFactory, dataForBookFromForm } from '../mocks/book';
+import { dataForStoryFromForm, storyFactory } from '../mocks/story';
 
 class MockDataService {
   constructor() {
-    this.bookList = bookListFactory();
-    this.storyList = storyListFactory();
+    this.bookList = [];
+    this.storyList = [];
   }
 
   getBooks() {
@@ -24,11 +24,25 @@ class MockDataService {
   }
 
   createStory() {
-    return storyFactory();
+    const story = storyFactory();
+    this.storyList = [story, ...this.storyList];
+    return story;
+  }
+
+  createStoryFromForm(storyData) {
+    const story = { ...storyData, ...dataForStoryFromForm() };
+    this.storyList = [story, ...this.storyList];
+  }
+
+  createBookFromForm(bookData) {
+    const book = { ...bookData, ...dataForBookFromForm() };
+    this.bookList = [book, ...this.bookList];
   }
 
   createBook() {
-    return bookFactory();
+    const book = bookFactory();
+    this.bookList = [book, ...this.bookList];
+    return book;
   }
 }
 

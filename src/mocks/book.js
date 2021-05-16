@@ -4,6 +4,14 @@ export function bookListFactory(n = 20) {
   return [...new Array(n)].map(bookFactory);
 }
 
+export function dataForBookFromForm() {
+  return {
+    _id: faker.datatype.uuid(),
+    authorId: faker.datatype.uuid(),
+    rating: faker.datatype.number({ min: 1, max: 5 }),
+  };
+}
+
 export function bookFactory() {
   return {
     _id: faker.datatype.uuid(),
@@ -16,6 +24,7 @@ export function bookFactory() {
     otherAuthors: [...new Array(faker.datatype.number({ min: 1, max: 3 }))].map(faker.lorem.words),
     pageQuantity: faker.datatype.number({ min: 80, max: 1200 }),
     isPaid: faker.datatype.boolean(),
+    price: faker.datatype.number({ min: 60, max: 1000 }),
     description: faker.lorem.paragraph(),
     bookSrc: null,
     rating: faker.datatype.number({ min: 1, max: 5 }),

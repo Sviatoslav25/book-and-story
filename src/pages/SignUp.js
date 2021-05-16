@@ -59,7 +59,7 @@ export default function SingUp() {
               <Button variant="outline-primary">Sing up</Button>
             </Link>
             <Form onSubmit={Submit}>
-              <Card.Title>Sign in</Card.Title>
+              <Card.Title>Sign up</Card.Title>
               <Form.Group controlId="formBasicEmail">
                 <Form.Label>Email address</Form.Label>
                 <Form.Control
