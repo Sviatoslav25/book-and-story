@@ -11,7 +11,7 @@ export default function BookDetails() {
   const [error, setError] = useState('');
   useEffect(() => {
     getBook();
-  }, [getBook]);
+  }, []);
 
   function getBook() {
     setIsLoading(true);

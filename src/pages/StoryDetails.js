@@ -12,7 +12,7 @@ export default function StoryDetails() {
 
   useEffect(() => {
     getStory();
-  }, [getStory]);
+  }, []);
 
   function getStory() {
     setIsLoading(true);
