@@ -1,7 +1,8 @@
+import axios from 'axios';
 import React, { useState } from 'react';
-import { Button, Card, Form } from 'react-bootstrap';
+import { Button, Card, Form, Spinner } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
-import MockDataService from '../../services/MockDataService';
+import { toast } from 'react-toastify';
 import InputCreator from '../inputCreator/InputCreator';
 
 export default function AddBookForm() {
@@ -19,6 +20,8 @@ export default function AddBookForm() {
     description: '',
     bookSrc: '',
   });
+
+  const [isAdding, setIsAdding] = useState(false);
 
   const onChangeName = (e) => {
     setBookData({ ...bookData, name: e.target.value });
@@ -61,10 +64,24 @@ export default function AddBookForm() {
     setBookData({ ...bookData, bookSrc: e.target.value });
   };
 
+  const addBook = () => {
+    setIsAdding(true);
+    axios
+      .post('/api/books/create', bookData)
+      .then(() => {
+        history.push('/home');
+      })
+      .catch((e) => {
+        toast.error(e.message);
+      })
+      .finally(() => {
+        setIsAdding(false);
+      });
+  };
+
   const submit = (e) => {
     e.preventDefault();
-    MockDataService.createBookFromForm(bookData);
-    history.push('/home');
+    addBook();
   };
 
   return (
@@ -97,7 +114,13 @@ export default function AddBookForm() {
         <Form.Control as="textarea" rows={3} onChange={onChangeDescription} />
       </Form.Group>
       <InputCreator controlId="bookSrc" labelText="Book src" value={bookData.bookSrc} onChange={onChangeBookSrc} />
-      <Button variant="primary" type="submit" block>
+      <Button variant="primary" type="submit" block disabled={isAdding}>
+        {isAdding ? (
+          <>
+            <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+            <span className="sr-only">Loading...</span>
+          </>
+        ) : null}
         Add Book
       </Button>
     </Form>

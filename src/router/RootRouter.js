@@ -4,11 +4,11 @@ import AppLayout from '../components/layouts/AppLayout';
 import AuthLayout from '../components/layouts/AuthLayout';
 import AddBook from '../pages/AddBook';
 import AddStory from '../pages/AddStory';
-import Book from '../pages/Book';
+import BookDetails from '../pages/BookDetails';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import SignUp from '../pages/SignUp';
-import Story from '../pages/Story';
+import StoryDetails from '../pages/StoryDetails';
 import AuthManager from '../services/AuthManager';
 import paths from './paths';
 
@@ -39,12 +39,12 @@ const appRouts = [
   {
     path: paths.book,
     exact: true,
-    Component: Book,
+    Component: BookDetails,
   },
   {
     path: paths.story,
     exact: true,
-    Component: Story,
+    Component: StoryDetails,
   },
   {
     path: paths.addStory,

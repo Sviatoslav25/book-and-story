@@ -1,7 +1,8 @@
+import axios from 'axios';
 import React, { useState } from 'react';
-import { Button, Card, Form } from 'react-bootstrap';
+import { Button, Card, Form, Spinner } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
-import MockDataService from '../../services/MockDataService';
+import { toast } from 'react-toastify';
 import InputCreator from '../inputCreator/InputCreator';
 
 export default function AddStoryForm() {
@@ -14,6 +15,7 @@ export default function AddStoryForm() {
     shortDescription: '',
     story: '',
   });
+  const [isAdding, setIsAdding] = useState(false);
 
   const onChangeName = (e) => {
     setStoryData({ ...storyData, name: e.target.value });
@@ -35,10 +37,24 @@ export default function AddStoryForm() {
     setStoryData({ ...storyData, story: e.target.value });
   };
 
+  const addStory = () => {
+    setIsAdding(true);
+    axios
+      .post('/api/stories/create', storyData)
+      .then(() => {
+        history.push('/home');
+      })
+      .catch((e) => {
+        toast.error(e.message);
+      })
+      .finally(() => {
+        setIsAdding(false);
+      });
+  };
+
   const submit = (e) => {
     e.preventDefault();
-    MockDataService.createStoryFromForm(storyData);
-    history.push('/home');
+    addStory();
   };
 
   return (
@@ -56,6 +72,12 @@ export default function AddStoryForm() {
         <Form.Control as="textarea" rows={3} onChange={onChangeStory} />
       </Form.Group>
       <Button variant="primary" type="submit" block>
+        {isAdding ? (
+          <>
+            <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+            <span className="sr-only">Loading...</span>
+          </>
+        ) : null}
         Add Story
       </Button>
     </Form>

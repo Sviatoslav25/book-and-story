@@ -14,13 +14,10 @@ export function dataForStoryFromForm() {
 
 export function storyFactory() {
   return {
-    _id: faker.datatype.uuid(),
     name: faker.lorem.words(),
     date: faker.date.past(),
-    authorId: faker.datatype.uuid(),
     genre: faker.lorem.words(),
     shortDescription: faker.lorem.paragraph(),
     story: faker.lorem.paragraphs(),
-    rating: faker.datatype.number({ min: 1, max: 5 }),
   };
 }

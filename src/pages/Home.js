@@ -1,72 +1,26 @@
 import React, { useState } from 'react';
-import { Button, Col, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Row } from 'react-bootstrap';
 
-import BookCard from '../components/book/BookCard';
-import StoryCard from '../components/story/StoryCard';
-import MockDataService from '../services/MockDataService';
-import homeStyle from '../pagesStyle/Home.module.scss';
-import paths from '../router/paths';
+import BookList from '../components/BookList/BookList';
+import StoryList from '../components/StoryList/StoryList';
+import ShowBooksOrStoriesManager from '../services/ShowBooksOrStoriesManager';
 
 export default function Home() {
-  const [isBook, setIsBook] = useState(true);
-  const [books, setBooks] = useState(MockDataService.getBooks());
-  const [stories, setStories] = useState(MockDataService.getStories());
+  const [isBook, setIsBook] = useState(ShowBooksOrStoriesManager.isShowBooks());
 
-  const changeView = () => {
-    setIsBook(!isBook);
+  const switchToBooks = () => {
+    ShowBooksOrStoriesManager.setIsBooks(true);
+    setIsBook(true);
   };
 
-  const addBookRandomData = () => {
-    const book = MockDataService.createBook();
-    setBooks([book, ...books]);
-  };
-
-  const addStoryRandomData = () => {
-    const story = MockDataService.createStory();
-    setStories([story, ...stories]);
+  const switchToStories = () => {
+    ShowBooksOrStoriesManager.setIsBooks(false);
+    setIsBook(false);
   };
 
   return (
     <>
-      <Button onClick={changeView} className="mt-4">
-        {isBook ? 'Stories' : 'Books'}
-      </Button>
-      {isBook ? (
-        <Button className={homeStyle.addButton} onClick={addBookRandomData}>
-          addBook(Random Data)
-        </Button>
-      ) : (
-        <Button className={homeStyle.addButton} onClick={addStoryRandomData}>
-          addStory(Random Data)
-        </Button>
-      )}
-      {isBook ? (
-        <Link to={paths.addBook}>
-          <Button className={homeStyle.addButton}>addBook</Button>
-        </Link>
-      ) : (
-        <Link to={paths.addStory}>
-          <Button className={homeStyle.addButton}>addStory</Button>
-        </Link>
-      )}
-      <Row>
-        {isBook
-          ? books.map((book) => {
-              return (
-                <Col key={book._id} lg="3" md="4" sm="6" xs="6" className="mt-4">
-                  <BookCard book={book} />
-                </Col>
-              );
-            })
-          : stories.map((story) => {
-              return (
-                <Col key={story._id} lg="3" md="4" sm="6" xs="6" className="mt-4">
-                  <StoryCard story={story} />
-                </Col>
-              );
-            })}
-      </Row>
+      <Row>{isBook ? <BookList switchToStories={switchToStories} /> : <StoryList switchToBooks={switchToBooks} />}</Row>
     </>
   );
 }
