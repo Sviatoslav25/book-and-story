@@ -17,35 +17,38 @@ export default function StoryList({ switchToBooks }) {
     fetchStory();
   }, []);
 
-  function fetchStory() {
+  async function fetchStory() {
     setIsLoading(true);
-    axios
-      .get('/api/stories/all')
-      .then((resolve) => {
-        setStories(resolve.data);
-      })
-      .catch((e) => {
-        setError(e.message);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    try {
+      const resolve = await axios.get('/api/stories/all');
+      setStories(resolve.data);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
-  const addStory = () => {
+  const addStory = async () => {
     const story = MockDataService.createStory();
     setIsAdding(true);
-    axios
-      .post('/api/stories/create', story)
-      .then(() => {
-        return fetchStory();
-      })
-      .catch((e) => {
-        toast.error(e.message);
-      })
-      .finally(() => {
-        setIsAdding(false);
-      });
+    try {
+      await axios.post('/api/stories/create', story);
+      fetchStory();
+    } catch (e) {
+      toast.error(e.message);
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
+  const ChangeRating = async (storyId, newRating) => {
+    try {
+      await axios.post('/api/stories/add_rating', { storyId, rating: newRating });
+      fetchStory();
+    } catch (e) {
+      toast.error(e.message);
+    }
   };
 
   return (
@@ -70,7 +73,7 @@ export default function StoryList({ switchToBooks }) {
       {stories.map((story) => {
         return (
           <Col key={story._id} lg="3" md="4" sm="6" xs="6" className="mt-4">
-            <StoryCard story={story} />
+            <StoryCard ChangeRating={ChangeRating} story={story} />
           </Col>
         );
       })}

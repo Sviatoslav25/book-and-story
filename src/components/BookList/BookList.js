@@ -17,35 +17,38 @@ export default function BookList({ switchToStories }) {
     fetchBook();
   }, []);
 
-  function fetchBook() {
+  async function fetchBook() {
     setIsLoading(true);
-    return axios
-      .get('/api/books/all')
-      .then((resolve) => {
-        setBooks(resolve.data);
-      })
-      .catch((e) => {
-        setError(e.message);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    try {
+      const resolve = await axios.get('/api/books/all');
+      setBooks(resolve.data);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
-  const addBook = () => {
+  const addBook = async () => {
     const book = MockDataService.createBook();
     setIsAdding(true);
-    axios
-      .post('/api/books/create', book)
-      .then(() => {
-        return fetchBook();
-      })
-      .catch((e) => {
-        toast.error(e.message);
-      })
-      .finally(() => {
-        setIsAdding(false);
-      });
+    try {
+      await axios.post('/api/books/create', book);
+      fetchBook();
+    } catch (e) {
+      toast.error(e.message);
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
+  const ChangeRating = async (bookId, newRating) => {
+    try {
+      await axios.post('/api/books/add_rating', { bookId, rating: newRating });
+      fetchBook();
+    } catch (e) {
+      toast.error(e.message);
+    }
   };
 
   return (
@@ -71,7 +74,7 @@ export default function BookList({ switchToStories }) {
       {books.map((book) => {
         return (
           <Col key={book._id} lg="3" md="4" sm="6" xs="6" className="mt-4">
-            <BookCard book={book} />
+            <BookCard ChangeRating={ChangeRating} book={book} />
           </Col>
         );
       })}
