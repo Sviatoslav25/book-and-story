@@ -8,7 +8,7 @@ import style from './StoryCard.module.scss';
 const storyImg =
   'https://images-platform.99static.com//4sAE0-g_qA0-XAYWunH9YKSpsQ8=/160x139:837x816/fit-in/500x500/99designs-contests-attachments/110/110993/attachment_110993584';
 
-export default function StoryCard({ story, ChangeRating }) {
+export default function StoryCard({ story, ChangeRating, isUpdate }) {
   const addBookIdForChangeRating = (newRating) => {
     ChangeRating(story._id, newRating);
   };
@@ -22,8 +22,14 @@ export default function StoryCard({ story, ChangeRating }) {
           <Card.Text>{story.shortDescription}</Card.Text>
         </Card.Body>
       </Link>
-      <ChangeRatingStart ChangeRating={addBookIdForChangeRating} />
-      <RatingStart rating={story.rating} />
+      {isUpdate ? (
+        <div>loading...</div>
+      ) : (
+        <>
+          <ChangeRatingStart ChangeRating={addBookIdForChangeRating} />
+          <RatingStart rating={story.rating} />
+        </>
+      )}
     </Card>
   );
 }

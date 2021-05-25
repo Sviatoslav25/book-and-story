@@ -13,6 +13,8 @@ export default function StoryList({ switchToBooks }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [isAdding, setIsAdding] = useState(false);
+  const [updateRating, setUpdateRating] = useState({ storyId: null, isUpdate: false });
+
   useEffect(() => {
     fetchStory();
   }, []);
@@ -34,7 +36,7 @@ export default function StoryList({ switchToBooks }) {
     setIsAdding(true);
     try {
       await axios.post('/api/stories/create', story);
-      fetchStory();
+      await fetchStory();
     } catch (e) {
       toast.error(e.message);
     } finally {
@@ -43,11 +45,14 @@ export default function StoryList({ switchToBooks }) {
   };
 
   const ChangeRating = async (storyId, newRating) => {
+    setUpdateRating({ storyId, isUpdate: true });
     try {
       await axios.post('/api/stories/add_rating', { storyId, rating: newRating });
-      fetchStory();
+      await fetchStory();
     } catch (e) {
       toast.error(e.message);
+    } finally {
+      setUpdateRating({ storyId: null, isUpdate: false });
     }
   };
 
@@ -73,7 +78,11 @@ export default function StoryList({ switchToBooks }) {
       {stories.map((story) => {
         return (
           <Col key={story._id} lg="3" md="4" sm="6" xs="6" className="mt-4">
-            <StoryCard ChangeRating={ChangeRating} story={story} />
+            {updateRating.storyId === story._id ? (
+              <StoryCard isUpdate={updateRating.isUpdate} ChangeRating={ChangeRating} story={story} />
+            ) : (
+              <StoryCard ChangeRating={ChangeRating} story={story} />
+            )}
           </Col>
         );
       })}
