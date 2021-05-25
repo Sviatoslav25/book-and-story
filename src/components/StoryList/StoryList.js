@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import paths from '../../router/paths';
 import MockDataService from '../../services/MockDataService';
+import Search from '../search/Search';
 import StoryCard from '../story/StoryCard';
 import style from './StoryList.module.scss';
 
@@ -14,6 +15,7 @@ export default function StoryList({ switchToBooks }) {
   const [error, setError] = useState('');
   const [isAdding, setIsAdding] = useState(false);
   const [updateRating, setUpdateRating] = useState({ storyId: null, isUpdate: false });
+  const [isStoriesFound, setIsStoriesFound] = useState(false);
 
   useEffect(() => {
     fetchStory();
@@ -56,9 +58,25 @@ export default function StoryList({ switchToBooks }) {
     }
   };
 
+  const searchStories = async (lineForSearch) => {
+    try {
+      const resolve = await axios.get(`/api/stories/search/${lineForSearch}`);
+      setStories(resolve.data);
+      setIsStoriesFound(true);
+    } catch (e) {
+      toast.error(e.message);
+    }
+  };
+
+  const deleteSearch = () => {
+    setIsStoriesFound(false);
+    fetchStory();
+  };
+
   return (
     <>
       <Container className="mt-3">
+        <Search search={searchStories} deleteSearch={deleteSearch} isFound={isStoriesFound} />
         <Button onClick={switchToBooks}>Books</Button>
         <Button className={style.addButton} onClick={addStory} disabled={isAdding}>
           {isAdding ? (

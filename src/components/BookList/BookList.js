@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import paths from '../../router/paths';
 import MockDataService from '../../services/MockDataService';
 import BookCard from '../book/BookCard';
+import Search from '../search/Search';
 import style from './BookList.module.scss';
 
 export default function BookList({ switchToStories }) {
@@ -14,6 +15,7 @@ export default function BookList({ switchToStories }) {
   const [error, setError] = useState('');
   const [isAdding, setIsAdding] = useState(false);
   const [updateRating, setUpdateRating] = useState({ bookId: null, isUpdate: false });
+  const [isBooksFound, setIsBooksFound] = useState(false);
 
   useEffect(() => {
     fetchBook();
@@ -44,7 +46,7 @@ export default function BookList({ switchToStories }) {
     }
   };
 
-  const ChangeRating = async (bookId, newRating) => {
+  const changeRating = async (bookId, newRating) => {
     setUpdateRating({ bookId, isUpdate: true });
     try {
       await axios.post('/api/books/add_rating', { bookId, rating: newRating });
@@ -56,9 +58,25 @@ export default function BookList({ switchToStories }) {
     }
   };
 
+  const searchBooks = async (lineForSearch) => {
+    try {
+      const resolve = await axios.get(`/api/books/search/${lineForSearch}`);
+      setBooks(resolve.data);
+      setIsBooksFound(true);
+    } catch (e) {
+      toast.error(e.message);
+    }
+  };
+
+  const deleteSearch = () => {
+    setIsBooksFound(false);
+    fetchBook();
+  };
+
   return (
     <>
       <Container className="mt-3">
+        <Search search={searchBooks} deleteSearch={deleteSearch} isFound={isBooksFound} />
         <Button onClick={switchToStories}>Stories</Button>
         <Button className={style.addButton} onClick={addBook} disabled={isAdding}>
           {isAdding ? (
@@ -80,9 +98,9 @@ export default function BookList({ switchToStories }) {
         return (
           <Col key={book._id} lg="3" md="4" sm="6" xs="6" className="mt-4">
             {updateRating.bookId === book._id ? (
-              <BookCard ChangeRating={ChangeRating} book={book} isUpdate={updateRating} />
+              <BookCard ChangeRating={changeRating} book={book} isUpdate={updateRating} />
             ) : (
-              <BookCard ChangeRating={ChangeRating} book={book} />
+              <BookCard ChangeRating={changeRating} book={book} />
             )}
           </Col>
         );
