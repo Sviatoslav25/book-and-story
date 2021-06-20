@@ -1,4 +1,4 @@
-import { Card } from 'react-bootstrap';
+import { Card, Button } from 'react-bootstrap';
 import { generatePath, Link } from 'react-router-dom';
 import paths from '../../router/paths';
 import ChangeRatingStart from '../RatingStar/ChangeRantingStart';
@@ -19,6 +19,7 @@ export default function BookCard({ book, ChangeRating, isUpdate }) {
           <Card.Text>{book.description}</Card.Text>
         </Card.Body>
       </Link>
+      <Button>add comment</Button>
       {isUpdate ? (
         <div>loading...</div>
       ) : (

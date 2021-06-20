@@ -1,84 +1,78 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Alert, Button, Col, Container, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import useAPIMethod from '../../hooks/useAPIMethod';
+import useAPIQuery from '../../hooks/useAPIQuery';
 import paths from '../../router/paths';
-import MockDataService from '../../services/MockDataService';
 import Search from '../search/Search';
 import StoryCard from '../story/StoryCard';
 import style from './StoryList.module.scss';
+import ItemsFound, { STORIES } from '../ItemsFound/ItemsFound';
+import MockDataService from '../../services/MockDataService';
 
 export default function StoryList({ switchToBooks }) {
-  const [stories, setStories] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [isAdding, setIsAdding] = useState(false);
-  const [updateRating, setUpdateRating] = useState({ storyId: null, isUpdate: false });
+  const [idOfSelectedStory, setIdOfSelectedStory] = useState(null);
+  const [lineForSearch, setLineForSearch] = useState('');
+  const [isSearchingStories, setIsSearchingStories] = useState(false);
   const [isStoriesFound, setIsStoriesFound] = useState(false);
+  const [isResettingSearch, setIsResettingSearch] = useState(false);
 
-  useEffect(() => {
-    fetchStory();
-  }, []);
+  const [stories, fetchStory, isLoading, error] = useAPIQuery({ url: '/api/stories/all' });
 
-  async function fetchStory() {
-    setIsLoading(true);
-    try {
-      const resolve = await axios.get('/api/stories/all');
-      setStories(resolve.data);
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  const addStory = async () => {
-    const story = MockDataService.createStory();
-    setIsAdding(true);
-    try {
-      await axios.post('/api/stories/create', story);
-      await fetchStory();
-    } catch (e) {
+  const [addStory, isAdding] = useAPIMethod({
+    onComplete: fetchStory,
+    url: '/api/stories/create',
+    onError: (e) => {
       toast.error(e.message);
-    } finally {
-      setIsAdding(false);
-    }
-  };
+    },
+  });
+
+  const [changeRating, isUpdateRating] = useAPIMethod({
+    onComplete: fetchStory,
+    url: '/api/stories/add_rating',
+    onError: (e) => {
+      toast.error(e.message);
+    },
+  });
 
   const ChangeRating = async (storyId, newRating) => {
-    setUpdateRating({ storyId, isUpdate: true });
-    try {
-      await axios.post('/api/stories/add_rating', { storyId, rating: newRating });
-      await fetchStory();
-    } catch (e) {
-      toast.error(e.message);
-    } finally {
-      setUpdateRating({ storyId: null, isUpdate: false });
-    }
+    setIdOfSelectedStory(storyId);
+    await changeRating({ storyId, rating: newRating });
+    setIdOfSelectedStory(null);
   };
 
-  const searchStories = async (lineForSearch) => {
-    try {
-      const resolve = await axios.get(`/api/stories/search/${lineForSearch}`);
-      setStories(resolve.data);
-      setIsStoriesFound(true);
-    } catch (e) {
-      toast.error(e.message);
-    }
+  const searchStories = (searchLine) => {
+    setLineForSearch(searchLine);
+    setIsStoriesFound(true);
   };
 
-  const deleteSearch = () => {
+  const deleteSearch = async () => {
+    setIsResettingSearch(true);
+    await fetchStory();
     setIsStoriesFound(false);
-    fetchStory();
+    setLineForSearch('');
+    setIsResettingSearch(false);
   };
 
   return (
     <>
       <Container className="mt-3">
-        <Search search={searchStories} deleteSearch={deleteSearch} isFound={isStoriesFound} />
+        <Search
+          isResettingSearch={isResettingSearch}
+          isSearching={isSearchingStories}
+          search={searchStories}
+          deleteSearch={deleteSearch}
+          isFound={isStoriesFound}
+        />
         <Button onClick={switchToBooks}>Books</Button>
-        <Button className={style.addButton} onClick={addStory} disabled={isAdding}>
+        <Button
+          className={style.addButton}
+          onClick={() => {
+            addStory(MockDataService.createStory());
+          }}
+          disabled={isAdding}
+        >
           {isAdding ? (
             <>
               <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
@@ -92,18 +86,22 @@ export default function StoryList({ switchToBooks }) {
         </Link>
       </Container>
       {error ? <Alert variant="danger">{error}</Alert> : null}
-      {isLoading && !stories.length ? <>Loading...</> : null}
-      {stories.map((story) => {
-        return (
-          <Col key={story._id} lg="3" md="4" sm="6" xs="6" className="mt-4">
-            {updateRating.storyId === story._id ? (
-              <StoryCard isUpdate={updateRating.isUpdate} ChangeRating={ChangeRating} story={story} />
-            ) : (
-              <StoryCard ChangeRating={ChangeRating} story={story} />
-            )}
-          </Col>
-        );
-      })}
+      {isLoading && !stories ? <>Loading...</> : null}
+      {isStoriesFound ? (
+        <ItemsFound lineForSearch={lineForSearch} setIsSearching={setIsSearchingStories} nameItems={STORIES} />
+      ) : (
+        stories?.map((story) => {
+          return (
+            <Col key={story._id} lg="3" md="4" sm="6" xs="6" className="mt-4">
+              {idOfSelectedStory === story._id ? (
+                <StoryCard isUpdate={isUpdateRating} ChangeRating={ChangeRating} story={story} />
+              ) : (
+                <StoryCard ChangeRating={ChangeRating} story={story} />
+              )}
+            </Col>
+          );
+        })
+      )}
     </>
   );
 }

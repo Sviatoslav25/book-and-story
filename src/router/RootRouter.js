@@ -58,7 +58,7 @@ const appRouts = [
   },
 ];
 
-const RootRouter = () => {
+const useIsLoggedIn = () => {
   const [loggedIn, setLoggedIn] = useState(AuthManager.isLoggedIn());
 
   const subscriber = useCallback((token) => {
@@ -71,7 +71,11 @@ const RootRouter = () => {
       AuthManager.offLoginStatusChange(subscriber);
     };
   }, [subscriber]);
+  return loggedIn;
+};
 
+const RootRouter = () => {
+  const loggedIn = useIsLoggedIn();
   return (
     <Router>
       {loggedIn ? (
