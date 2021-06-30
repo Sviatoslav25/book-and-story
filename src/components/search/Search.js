@@ -9,6 +9,11 @@ export default function Search({ search, deleteSearch, isFound, isSearching, isR
     setValue(v.target.value);
   };
 
+  const onDeleteSearch = () => {
+    setValue('');
+    deleteSearch();
+  };
+
   const submit = () => {
     search(value);
   };
@@ -27,7 +32,7 @@ export default function Search({ search, deleteSearch, isFound, isSearching, isR
           <img className={style.searchIMG} alt="search img" src={searchIMG} />
         </Button>
         {isFound && (
-          <Button variant="danger" onClick={deleteSearch}>
+          <Button variant="danger" onClick={onDeleteSearch}>
             {isResettingSearch ? (
               <>
                 <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />

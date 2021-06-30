@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Button, Card, Col, Form, Row } from 'react-bootstrap';
+import { Button, Card, Col, Form, Row, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import useAPIMethod from '../hooks/useAPIMethod';
 import paths from '../router/paths';
-import AuthManager from '../services/AuthManager';
+import APIService from '../services/APIService';
 import { EmailValidator, PasswordValidator } from '../utils/validators/Validator';
 
 export default function Login() {
@@ -10,6 +12,12 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [isValidatedEmail, setIsValidatedEmail] = useState(true);
   const [isValidatedPassword, setIsValidatedPassword] = useState(true);
+  const [login, isLoginIn] = useAPIMethod({
+    call: APIService.login,
+    onError: (e) => {
+      toast.error(e.message);
+    },
+  });
 
   const onChangeEmail = (e) => {
     if (!isValidatedEmail) {
@@ -33,8 +41,9 @@ export default function Login() {
     setIsValidatedPassword(PasswordValidator(e.target.value));
   };
 
-  const Submit = () => {
-    AuthManager.login();
+  const Submit = (e) => {
+    e.preventDefault();
+    login({ email, password });
   };
 
   return (
@@ -70,12 +79,18 @@ export default function Login() {
                 />
               </Form.Group>
               <Button
-                disabled={!isValidatedEmail || !isValidatedPassword || !email || !password || false}
+                disabled={!isValidatedEmail || !isValidatedPassword || !email || !password || isLoginIn || false}
                 variant="primary"
                 type="submit"
                 block
               >
-                Submit
+                {isLoginIn ? (
+                  <>
+                    <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+                    <span className="sr-only">Loading...</span>
+                  </>
+                ) : null}
+                Login
               </Button>
             </Form>
           </Card.Body>

@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { Button, Card, Col, Form, Row } from 'react-bootstrap';
+import { Button, Card, Col, Form, Row, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import useAPIMethod from '../hooks/useAPIMethod';
 import paths from '../router/paths';
-import AuthManager from '../services/AuthManager';
+import APIService from '../services/APIService';
 import { EmailValidator, PasswordValidator } from '../utils/validators/Validator';
 
 export default function SingUp() {
@@ -12,6 +14,10 @@ export default function SingUp() {
   const [isValidatedEmail, setIsValidatedEmail] = useState(true);
   const [isValidatedPassword, setIsValidatedPassword] = useState(true);
   const [isRepeatPasswordEqualPassword, setIsRepeatPasswordEqualPassword] = useState(true);
+  const [registration, isRegistrationIn] = useAPIMethod({
+    call: APIService.registration,
+    onError: (e) => toast.error(e.message),
+  });
 
   const onChangeEmail = (e) => {
     if (!isValidatedEmail) {
@@ -47,7 +53,7 @@ export default function SingUp() {
   };
 
   const Submit = () => {
-    AuthManager.login();
+    registration({ email, password });
   };
 
   return (
@@ -101,12 +107,19 @@ export default function SingUp() {
                   !password ||
                   !repeatPassword ||
                   !isRepeatPasswordEqualPassword ||
+                  isRegistrationIn ||
                   false
                 }
                 variant="primary"
                 type="submit"
                 block
               >
+                {isRegistrationIn ? (
+                  <>
+                    <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+                    <span className="sr-only">Loading...</span>
+                  </>
+                ) : null}
                 Submit
               </Button>
             </Form>

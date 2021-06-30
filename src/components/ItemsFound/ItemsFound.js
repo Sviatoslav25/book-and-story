@@ -5,6 +5,7 @@ import useAPIMethod from '../../hooks/useAPIMethod';
 import useAPIQuery from '../../hooks/useAPIQuery';
 import StoryCard from '../story/StoryCard';
 import BookCard from '../book/BookCard';
+import APIService from '../../services/APIService';
 
 export const BOOKS = 'BOOKS';
 export const STORIES = 'STORIES';
@@ -12,11 +13,11 @@ export const STORIES = 'STORIES';
 export default function ItemsFound({ lineForSearch, setIsSearching, nameItems }) {
   const [idOfSelectedItem, setIdOfSelectedItem] = useState(null);
   const [foundItems, refetchFoundItems, isLoading, error] = useAPIQuery({
-    url: nameItems === BOOKS ? `/api/books/search/${lineForSearch}` : `/api/stories/search/${lineForSearch}`,
+    call: nameItems === BOOKS ? APIService.searchBooks(lineForSearch) : APIService.searchStories(lineForSearch),
   });
   const [changeRating, isUpdateRating] = useAPIMethod({
+    call: nameItems === BOOKS ? APIService.changeRantingForBook : APIService.changeRantingForStories,
     onComplete: refetchFoundItems,
-    url: nameItems === BOOKS ? '/api/books/add_rating' : '/api/stories/add_rating',
     onError: (e) => {
       toast.error(e.message);
     },
@@ -29,7 +30,6 @@ export default function ItemsFound({ lineForSearch, setIsSearching, nameItems })
     } else if (nameItems === STORIES) {
       await changeRating({ storyId: itemId, rating: newRating });
     }
-
     setIdOfSelectedItem(null);
   };
 

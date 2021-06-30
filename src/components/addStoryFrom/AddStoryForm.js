@@ -1,8 +1,10 @@
-import axios from 'axios';
 import React, { useState } from 'react';
 import { Button, Card, Form, Spinner } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import useAPIMethod from '../../hooks/useAPIMethod';
+import paths from '../../router/paths';
+import APIService from '../../services/APIService';
 import InputCreator from '../inputCreator/InputCreator';
 
 export default function AddStoryForm() {
@@ -15,7 +17,15 @@ export default function AddStoryForm() {
     shortDescription: '',
     story: '',
   });
-  const [isAdding, setIsAdding] = useState(false);
+  const [addStory, isAdding] = useAPIMethod({
+    call: APIService.addStory,
+    onError: (e) => {
+      toast.error(e.message);
+    },
+    onComplete: () => {
+      history.push(paths.home);
+    },
+  });
 
   const onChangeName = (e) => {
     setStoryData({ ...storyData, name: e.target.value });
@@ -37,24 +47,9 @@ export default function AddStoryForm() {
     setStoryData({ ...storyData, story: e.target.value });
   };
 
-  const addStory = () => {
-    setIsAdding(true);
-    axios
-      .post('/api/stories/create', storyData)
-      .then(() => {
-        history.push('/home');
-      })
-      .catch((e) => {
-        toast.error(e.message);
-      })
-      .finally(() => {
-        setIsAdding(false);
-      });
-  };
-
   const submit = (e) => {
     e.preventDefault();
-    addStory();
+    addStory(storyData);
   };
 
   return (

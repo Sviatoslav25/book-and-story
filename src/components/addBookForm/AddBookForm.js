@@ -1,9 +1,11 @@
-import axios from 'axios';
 import React, { useState } from 'react';
 import { Button, Card, Form, Spinner } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import InputCreator from '../inputCreator/InputCreator';
+import useAPIMethod from '../../hooks/useAPIMethod';
+import APIService from '../../services/APIService';
+import paths from '../../router/paths';
 
 export default function AddBookForm() {
   const history = useHistory();
@@ -21,7 +23,13 @@ export default function AddBookForm() {
     bookSrc: '',
   });
 
-  const [isAdding, setIsAdding] = useState(false);
+  const [addBook, isAdding] = useAPIMethod({
+    call: APIService.addBook,
+    onError: (e) => toast.error(e.message),
+    onComplete: () => {
+      history.push(paths.home);
+    },
+  });
 
   const onChangeName = (e) => {
     setBookData({ ...bookData, name: e.target.value });
@@ -64,24 +72,9 @@ export default function AddBookForm() {
     setBookData({ ...bookData, bookSrc: e.target.value });
   };
 
-  const addBook = () => {
-    setIsAdding(true);
-    axios
-      .post('/api/books/create', bookData)
-      .then(() => {
-        history.push('/home');
-      })
-      .catch((e) => {
-        toast.error(e.message);
-      })
-      .finally(() => {
-        setIsAdding(false);
-      });
-  };
-
   const submit = (e) => {
     e.preventDefault();
-    addBook();
+    addBook(bookData);
   };
 
   return (

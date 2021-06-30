@@ -1,38 +1,17 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
 import { Alert, Card, Container } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
+import useAPIQuery from '../hooks/useAPIQuery';
 import style from '../pagesStyle/StoryDetails.module.scss';
+import APIService from '../services/APIService';
 
 export default function StoryDetails() {
   const params = useParams();
-  const [isLoading, setIsLoading] = useState(false);
-  const [story, setStory] = useState(null);
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    getStory();
-  }, []);
-
-  function getStory() {
-    setIsLoading(true);
-    axios
-      .get(`/api/stories/${params.id}`)
-      .then((resolve) => {
-        setStory(resolve.data);
-      })
-      .catch((e) => {
-        setError(e.message);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }
+  const [story, , isLoading, error] = useAPIQuery({ call: APIService.getStory(params.id) });
 
   if (error) {
     return (
       <Container className="mt-4">
-        <Alert variant="danger">{error}</Alert>
+        <Alert variant="danger">{error.message}</Alert>
       </Container>
     );
   }

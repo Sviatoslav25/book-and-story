@@ -10,6 +10,7 @@ import StoryCard from '../story/StoryCard';
 import style from './StoryList.module.scss';
 import ItemsFound, { STORIES } from '../ItemsFound/ItemsFound';
 import MockDataService from '../../services/MockDataService';
+import APIService from '../../services/APIService';
 
 export default function StoryList({ switchToBooks }) {
   const [idOfSelectedStory, setIdOfSelectedStory] = useState(null);
@@ -18,11 +19,11 @@ export default function StoryList({ switchToBooks }) {
   const [isStoriesFound, setIsStoriesFound] = useState(false);
   const [isResettingSearch, setIsResettingSearch] = useState(false);
 
-  const [stories, fetchStory, isLoading, error] = useAPIQuery({ url: '/api/stories/all' });
+  const [stories, fetchStory, isLoading, error] = useAPIQuery({ call: APIService.getStoryList });
 
   const [addStory, isAdding] = useAPIMethod({
     onComplete: fetchStory,
-    url: '/api/stories/create',
+    call: APIService.addStory,
     onError: (e) => {
       toast.error(e.message);
     },
@@ -30,13 +31,13 @@ export default function StoryList({ switchToBooks }) {
 
   const [changeRating, isUpdateRating] = useAPIMethod({
     onComplete: fetchStory,
-    url: '/api/stories/add_rating',
+    call: APIService.changeRantingForStories,
     onError: (e) => {
       toast.error(e.message);
     },
   });
 
-  const ChangeRating = async (storyId, newRating) => {
+  const onChangeRating = async (storyId, newRating) => {
     setIdOfSelectedStory(storyId);
     await changeRating({ storyId, rating: newRating });
     setIdOfSelectedStory(null);
@@ -85,7 +86,7 @@ export default function StoryList({ switchToBooks }) {
           <Button className={style.addButton}>addStory</Button>
         </Link>
       </Container>
-      {error ? <Alert variant="danger">{error}</Alert> : null}
+      {error ? <Alert variant="danger">{error.message}</Alert> : null}
       {isLoading && !stories ? <>Loading...</> : null}
       {isStoriesFound ? (
         <ItemsFound lineForSearch={lineForSearch} setIsSearching={setIsSearchingStories} nameItems={STORIES} />
@@ -94,9 +95,9 @@ export default function StoryList({ switchToBooks }) {
           return (
             <Col key={story._id} lg="3" md="4" sm="6" xs="6" className="mt-4">
               {idOfSelectedStory === story._id ? (
-                <StoryCard isUpdate={isUpdateRating} ChangeRating={ChangeRating} story={story} />
+                <StoryCard isUpdate={isUpdateRating} ChangeRating={onChangeRating} story={story} />
               ) : (
-                <StoryCard ChangeRating={ChangeRating} story={story} />
+                <StoryCard ChangeRating={onChangeRating} story={story} />
               )}
             </Col>
           );

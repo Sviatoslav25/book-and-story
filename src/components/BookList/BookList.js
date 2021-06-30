@@ -10,6 +10,7 @@ import style from './BookList.module.scss';
 import useAPIMethod from '../../hooks/useAPIMethod';
 import useAPIQuery from '../../hooks/useAPIQuery';
 import ItemsFound, { BOOKS } from '../ItemsFound/ItemsFound';
+import APIService from '../../services/APIService';
 
 export default function BookList({ switchToStories }) {
   const [idOfSelectedBook, setIdOfSelectedBook] = useState(null);
@@ -18,19 +19,19 @@ export default function BookList({ switchToStories }) {
   const [lineForSearch, setLineForSearch] = useState('');
   const [isResettingSearch, setIsResettingSearch] = useState(false);
 
-  const [books, fetchBook, isLoading, error] = useAPIQuery({ url: '/api/books/all' });
+  const [books, fetchBook, isLoading, error] = useAPIQuery({ call: APIService.getBookList });
 
   const [addBook, isAdding] = useAPIMethod({
+    call: APIService.addBook,
     onComplete: fetchBook,
-    url: '/api/books/create',
     onError: (e) => {
       toast.error(e.message);
     },
   });
 
   const [changeRating, isUpdateRating] = useAPIMethod({
+    call: APIService.changeRantingForBook,
     onComplete: fetchBook,
-    url: '/api/books/add_rating',
     onError: (e) => {
       toast.error(e.message);
     },
@@ -59,6 +60,7 @@ export default function BookList({ switchToStories }) {
     <>
       <Container className="mt-3">
         <Search
+          initialValue={lineForSearch}
           isSearching={isSearchingBooks}
           search={searchBooks}
           deleteSearch={deleteSearch}
