@@ -15,7 +15,10 @@ export default function AppLayout({ children }) {
             Home
           </Nav.Link>
           <Nav.Link as={Link} to={paths.myBooks}>
-            MyBooks
+            My Books
+          </Nav.Link>
+          <Nav.Link as={Link} to={paths.myStories}>
+            my Stories
           </Nav.Link>
         </Nav>
         <Button

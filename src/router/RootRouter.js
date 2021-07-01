@@ -7,6 +7,8 @@ import AddStory from '../pages/AddStory';
 import BookDetails from '../pages/BookDetails';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
+import MyBooks from '../pages/MyBooks';
+import MyStories from '../pages/MyStories';
 import SignUp from '../pages/SignUp';
 import StoryDetails from '../pages/StoryDetails';
 import AuthManager from '../services/AuthManager';
@@ -34,7 +36,7 @@ const appRouts = [
   {
     path: paths.myBooks,
     exact: true,
-    Component: Home,
+    Component: MyBooks,
   },
   {
     path: paths.book,
@@ -56,6 +58,7 @@ const appRouts = [
     exact: true,
     Component: AddBook,
   },
+  { path: paths.myStories, exact: true, Component: MyStories },
 ];
 
 const useIsLoggedIn = () => {

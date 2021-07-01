@@ -101,13 +101,13 @@ class APIService {
 
   getBook = (id) => {
     return async () => {
-      return this.#fetch({ url: `/api/books/${id}`, method: 'get' });
+      return this.#fetch({ url: `/api/books/book/${id}`, method: 'get' });
     };
   };
 
   getStory = (id) => {
     return async () => {
-      return this.#fetch({ url: `/api/stories/${id}`, method: 'get' });
+      return this.#fetch({ url: `/api/stories/story/${id}`, method: 'get' });
     };
   };
 
@@ -133,6 +133,18 @@ class APIService {
 
   getCurrentUserBooks = () => {
     return this.#fetch({ url: '/api/books/my', method: 'get' });
+  };
+
+  deleteBook = (bookId) => {
+    return this.#fetch({ url: `/api/books/delete/${bookId}`, method: 'delete' });
+  };
+
+  getCurrentUserStories = () => {
+    return this.#fetch({ url: '/api/stories/my', method: 'get' });
+  };
+
+  deleteStory = (storyId) => {
+    return this.#fetch({ url: `/api/stories/delete/${storyId}`, method: 'delete' });
   };
 }
 
