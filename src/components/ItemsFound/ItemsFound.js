@@ -34,6 +34,10 @@ export default function ItemsFound({ lineForSearch, setIsSearching, nameItems })
   };
 
   useEffect(() => {
+    refetchFoundItems();
+  }, [lineForSearch, refetchFoundItems]);
+
+  useEffect(() => {
     setIsSearching(isLoading);
   }, [isLoading, setIsSearching]);
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, Button, Col, Container, Spinner } from 'react-bootstrap';
+import { Alert, Button, Col, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import paths from '../../router/paths';
@@ -11,6 +11,7 @@ import useAPIMethod from '../../hooks/useAPIMethod';
 import useAPIQuery from '../../hooks/useAPIQuery';
 import ItemsFound, { BOOKS } from '../ItemsFound/ItemsFound';
 import APIService from '../../services/APIService';
+import ButtonWithSpinner from '../common/ButtonWithSpinner';
 
 export default function BookList({ switchToStories }) {
   const [idOfSelectedBook, setIdOfSelectedBook] = useState(null);
@@ -68,21 +69,15 @@ export default function BookList({ switchToStories }) {
           isResettingSearch={isResettingSearch}
         />
         <Button onClick={switchToStories}>Stories</Button>
-        <Button
+        <ButtonWithSpinner
           className={style.addButton}
           onClick={() => {
             addBook(MockDataService.createBook());
           }}
-          disabled={isAdding}
+          loading={isAdding}
         >
-          {isAdding ? (
-            <>
-              <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
-              <span className="sr-only">Loading...</span>
-            </>
-          ) : null}
           addBook(Random Data)
-        </Button>
+        </ButtonWithSpinner>
         <Link to={paths.addBook}>
           <Button className={style.addButton}>addBook</Button>
         </Link>

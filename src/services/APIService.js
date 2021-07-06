@@ -42,9 +42,7 @@ class APIService {
   #tryRefreshingOrLoutAndThrow = async () => {
     try {
       await this.#refreshToken();
-      console.log('Token successfully refreshed');
     } catch (e) {
-      console.log('Error refreshing token', e);
       this.logout();
       throw new Error(errors.TOKEN_EXPIRED);
     }
@@ -58,14 +56,25 @@ class APIService {
     AuthManager.setAccessToken(accessToken);
   };
 
-  async login({ email, password }) {
-    const {
-      data: { accessToken, refreshToken },
-    } = await axios.post('/api/auth/login', { email, password });
-    AuthManager.login({ accessToken, refreshToken });
-  }
+  #injectResponseMessageToError = (error) => {
+    const message = error.response?.data?.error;
+    // eslint-disable-next-line no-param-reassign
+    if (message) error.message = message;
+  };
 
-  async logout() {
+  login = async ({ email, password }) => {
+    try {
+      const {
+        data: { accessToken, refreshToken },
+      } = await axios.post('/api/auth/login', { email, password });
+      AuthManager.login({ accessToken, refreshToken });
+    } catch (error) {
+      this.#injectResponseMessageToError(error);
+      throw error;
+    }
+  };
+
+  logout = async () => {
     const token = AuthManager.getRefreshToken();
     if (token) {
       const result = axios.post('/api/auth/logout', { token });
@@ -74,14 +83,19 @@ class APIService {
     }
     AuthManager.logout();
     return null;
-  }
+  };
 
-  async registration({ email, password }) {
-    const {
-      data: { accessToken, refreshToken },
-    } = await axios.post('/api/auth/registration', { email, password });
-    AuthManager.registration({ accessToken, refreshToken });
-  }
+  registration = async ({ email, password }) => {
+    try {
+      const {
+        data: { accessToken, refreshToken },
+      } = await axios.post('/api/auth/registration', { email, password });
+      AuthManager.registration({ accessToken, refreshToken });
+    } catch (error) {
+      this.#injectResponseMessageToError(error);
+      throw error;
+    }
+  };
 
   getBookList = async () => {
     return this.#fetch({ url: '/api/books/all', method: 'get' });

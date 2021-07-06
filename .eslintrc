@@ -11,6 +11,7 @@
     "no-use-before-define": ["error", { "functions": false, "classes": false, "variables": true }],
     "no-underscore-dangle": 0,
     "class-methods-use-this": 0,
-    "react-hooks/exhaustive-deps": 1
+    "react-hooks/exhaustive-deps": 1,
+    "react/jsx-props-no-spreading": 0
   }
 }
