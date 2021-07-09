@@ -1,121 +1,112 @@
-import React, { useState } from 'react';
-import { Button, Card, Form, Spinner } from 'react-bootstrap';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import InputCreator from '../inputCreator/InputCreator';
+import { Formik, Form as FormikForm } from 'formik';
+import * as yup from 'yup';
+import { Form } from 'react-bootstrap';
+import ButtonWithSpinner from '../common/ButtonWithSpinner';
 import useAPIMethod from '../../hooks/useAPIMethod';
 import APIService from '../../services/APIService';
 import paths from '../../router/paths';
+import FormikFormControl from '../formik/FormikFormControl';
+import FormikFormGroup from '../formik/FormikFormGroup';
+import FormikTextAreaField from '../formik/FormikTextAreaField';
+import FormikInputArray from '../formik/FormikInputArray';
+import FormikFormCheck from '../formik/FormikFormCheck';
 
 export default function AddBookForm() {
   const history = useHistory();
 
-  const [bookData, setBookData] = useState({
+  const [addBook] = useAPIMethod({
+    call: APIService.addBook,
+    onError: (e) => toast.error(e.message),
+    onComplete: () => {
+      toast.success('Book created successfully');
+      history.push(paths.home);
+    },
+  });
+
+  const onSubmit = async (value) => {
+    if (value.isPaid) {
+      await addBook(value);
+    } else {
+      await addBook({ ...value, price: '' });
+    }
+  };
+
+  const schema = yup.object().shape({
+    name: yup.string().label('name').required().min(2).max(80),
+    img: yup.string().label('Image URL').url().required(),
+    date: yup.date().label('Book release date').required(),
+    genre: yup.string().label('Book genre').min(3).max(60).required(),
+    // price: yup.number().label('Book price'),
+    pagesQuantity: yup.number().label('Pages quantity').required().min(4).max(3000),
+    bookURL: yup.string().label('Link to book').url().required(),
+    otherAuthors: yup.array().of(yup.string().label('Other authors').min(3).max(50)),
+    description: yup.string().label('Description of the book').min(5).required(),
+  });
+
+  const initialValues = {
     name: '',
     img: '',
     date: '',
     genre: '',
     otherAuthors: [],
-    pageQuantity: '',
+    pagesQuantity: '',
     isPaid: false,
     price: '',
     description: '',
-    bookSrc: '',
-  });
-
-  const [addBook, isAdding] = useAPIMethod({
-    call: APIService.addBook,
-    onError: (e) => toast.error(e.message),
-    onComplete: () => {
-      history.push(paths.home);
-    },
-  });
-
-  const onChangeName = (e) => {
-    setBookData({ ...bookData, name: e.target.value });
-  };
-
-  const onChangeImg = (e) => {
-    setBookData({ ...bookData, img: e.target.value });
-  };
-
-  const onChangeDate = (e) => {
-    setBookData({ ...bookData, date: e.target.value });
-  };
-
-  const onChangeGenre = (e) => {
-    setBookData({ ...bookData, genre: e.target.value });
-  };
-
-  const onChangeOtherAuthors = (e) => {
-    const otherAuthors = e.target.value.split(',');
-    setBookData({ ...bookData, otherAuthors });
-  };
-
-  const onChangeQuantity = (e) => {
-    setBookData({ ...bookData, pageQuantity: e.target.value });
-  };
-
-  const onChangeIsPaid = (e) => {
-    setBookData({ ...bookData, isPaid: e.target.checked });
-  };
-
-  const onChangePrice = (e) => {
-    setBookData({ ...bookData, price: e.target.value });
-  };
-
-  const onChangeDescription = (e) => {
-    setBookData({ ...bookData, description: e.target.value });
-  };
-
-  const onChangeBookSrc = (e) => {
-    setBookData({ ...bookData, bookSrc: e.target.value });
-  };
-
-  const submit = (e) => {
-    e.preventDefault();
-    addBook(bookData);
+    bookURL: '',
   };
 
   return (
-    <Form onSubmit={submit}>
-      <Card.Title>Add book</Card.Title>
-      <InputCreator controlId="name" labelText="Book name" value={bookData.name} onChange={onChangeName} />
-      <InputCreator controlId="img" labelText="Image (link)" value={bookData.img} onChange={onChangeImg} />
-      <InputCreator controlId="date" labelText="Date" value={bookData.date} onChange={onChangeDate} />
-      <InputCreator controlId="genre" labelText="Genre" value={bookData.genre} onChange={onChangeGenre} />
-      <InputCreator
-        controlId="otherAuthors"
-        labelText="Other authors"
-        value={bookData.otherAuthors}
-        onChange={onChangeOtherAuthors}
-      />
-      <InputCreator
-        controlId="pageQuantity"
-        labelText="Page quantity"
-        value={bookData.pageQuantity}
-        onChange={onChangeQuantity}
-        type="number"
-      />
-      <Form.Group controlId="price">
-        <Form.Label>Price</Form.Label>
-        <Form.Control readOnly={!bookData.isPaid} type="number" value={bookData.price} onChange={onChangePrice} />
-        <Form.Check checked={bookData.isPaid} type="checkbox" label="Paid" onChange={onChangeIsPaid} />
-      </Form.Group>
-      <Form.Group controlId="description">
-        <Form.Label>Description</Form.Label>
-        <Form.Control as="textarea" rows={3} onChange={onChangeDescription} />
-      </Form.Group>
-      <InputCreator controlId="bookSrc" labelText="Book src" value={bookData.bookSrc} onChange={onChangeBookSrc} />
-      <Button variant="primary" type="submit" block disabled={isAdding}>
-        {isAdding ? (
-          <>
-            <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
-            <span className="sr-only">Loading...</span>
-          </>
-        ) : null}
-        Add Book
-      </Button>
-    </Form>
+    <Formik initialValues={initialValues} validationSchema={schema} onSubmit={onSubmit}>
+      {({ isSubmitting, values, errors }) => (
+        <FormikForm>
+          <FormikFormGroup label="Book name">
+            <FormikFormControl name="name" placeholder="Enter name" required />
+          </FormikFormGroup>
+          <FormikFormGroup label="Image URL">
+            <FormikFormControl name="img" placeholder="Enter url" required type="url" />
+          </FormikFormGroup>
+          <FormikFormGroup label="Book release date">
+            <FormikFormControl name="date" placeholder="Enter book release date" required type="date" />
+          </FormikFormGroup>
+          <FormikFormGroup label="Book genre">
+            <FormikFormControl name="genre" placeholder="Enter the genre of the book" required />
+          </FormikFormGroup>
+
+          <FormikFormGroup label="Pages quantity">
+            <FormikFormControl
+              name="pagesQuantity"
+              placeholder="Enter the number of pages in the book"
+              required
+              type="number"
+            />
+          </FormikFormGroup>
+          <FormikFormGroup label="Link to book">
+            <FormikFormControl name="bookURL" placeholder="Insert a link to the book" required type="url" />
+          </FormikFormGroup>
+          <FormikFormCheck name="isPaid" label="The book is paid" />
+          {values.isPaid && (
+            <FormikFormGroup label="Book price">
+              <FormikFormControl name="price" placeholder="Enter the price of the book" required type="number" />
+            </FormikFormGroup>
+          )}
+          <FormikInputArray
+            formControlProps={{ placeholder: 'Enter author' }}
+            label="Other authors"
+            name="otherAuthors"
+            addItemButtonLabel="+ Add author"
+          />
+          <FormikFormGroup label="Description of the book">
+            <FormikTextAreaField name="description" required />
+          </FormikFormGroup>
+          <ButtonWithSpinner type="submit" block loading={isSubmitting}>
+            Add Book
+          </ButtonWithSpinner>
+        </FormikForm>
+      )}
+    </Formik>
   );
 }
