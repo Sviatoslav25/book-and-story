@@ -160,6 +160,12 @@ class APIService {
   deleteStory = (storyId) => {
     return this.#fetch({ url: `/api/stories/delete/${storyId}`, method: 'delete' });
   };
+
+  updateBook = (bookId) => {
+    return async (bookData) => {
+      return this.#fetch({ url: `/api/books/edit/${bookId}`, method: 'post', data: { bookData } });
+    };
+  };
 }
 
 export default new APIService();

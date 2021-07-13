@@ -5,6 +5,7 @@ import AuthLayout from '../components/layouts/AuthLayout';
 import AddBook from '../pages/AddBook';
 import AddStory from '../pages/AddStory';
 import BookDetails from '../pages/BookDetails';
+import EditBook from '../pages/EditBook';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import MyBooks from '../pages/MyBooks';
@@ -59,6 +60,11 @@ const appRouts = [
     Component: AddBook,
   },
   { path: paths.myStories, exact: true, Component: MyStories },
+  {
+    path: paths.editBook,
+    exact: true,
+    Component: EditBook,
+  },
 ];
 
 const useIsLoggedIn = () => {

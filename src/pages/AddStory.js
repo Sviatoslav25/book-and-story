@@ -7,7 +7,7 @@ import useAPIMethod from '../hooks/useAPIMethod';
 import paths from '../router/paths';
 import APIService from '../services/APIService';
 
-export default function AddBook() {
+export default function AddStory() {
   const history = useHistory();
 
   const [addStory] = useAPIMethod({

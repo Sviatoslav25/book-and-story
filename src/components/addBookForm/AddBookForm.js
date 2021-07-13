@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Formik, Form as FormikForm } from 'formik';
 import * as yup from 'yup';
 import ButtonWithSpinner from '../common/ButtonWithSpinner';
@@ -7,46 +7,52 @@ import FormikFormGroup from '../formik/FormikFormGroup';
 import FormikTextAreaField from '../formik/FormikTextAreaField';
 import FormikInputArray from '../formik/FormikInputArray';
 import FormikFormCheck from '../formik/FormikFormCheck';
+import { prepareInitialValues } from '../../utils/form';
 
-export default function AddBookForm({ onSubmit }) {
-  const NAME_MIN = 3;
-  const NAME_MAX = 80;
-  const GENRE_MIN = 3;
-  const GENRE_MAX = 80;
-  const PAGE_QUANTITY_MIN = 4;
-  const PAGE_QUANTITY_MAX = 3000;
-  const OTHER_AUTHOR_FULL_NAME_MIN = 3;
-  const OTHER_AUTHOR_FULL_NAME_MAX = 60;
+const NAME_MIN = 3;
+const NAME_MAX = 80;
+const GENRE_MIN = 3;
+const GENRE_MAX = 80;
+const PAGE_QUANTITY_MIN = 4;
+const PAGE_QUANTITY_MAX = 3000;
+const OTHER_AUTHOR_FULL_NAME_MIN = 3;
+const OTHER_AUTHOR_FULL_NAME_MAX = 60;
 
-  const schema = yup.object().shape({
-    name: yup.string().label('name').required().min(NAME_MIN).max(NAME_MAX),
-    img: yup.string().label('Image URL').url().required(),
-    date: yup.date().label('Book release date').required(),
-    genre: yup.string().label('Book genre').required().min(GENRE_MIN).max(GENRE_MAX),
-    price: yup.number().label('Book price'),
-    pagesQuantity: yup.number().label('Pages quantity').required().min(PAGE_QUANTITY_MIN).max(PAGE_QUANTITY_MAX),
-    bookURL: yup.string().label('Link to book').url().required(),
-    otherAuthors: yup
-      .array()
-      .of(yup.string().label('Other authors').min(OTHER_AUTHOR_FULL_NAME_MIN).max(OTHER_AUTHOR_FULL_NAME_MAX)),
-    description: yup.string().label('Description of the book').required().min(5),
-  });
+const schema = yup.object().shape({
+  name: yup.string().label('name').required().min(NAME_MIN).max(NAME_MAX),
+  img: yup.string().label('Image URL').url().required(),
+  date: yup.date().label('Book release date').required(),
+  genre: yup.string().label('Book genre').required().min(GENRE_MIN).max(GENRE_MAX),
+  price: yup.number().label('Book price'),
+  pagesQuantity: yup.number().label('Pages quantity').required().min(PAGE_QUANTITY_MIN).max(PAGE_QUANTITY_MAX),
+  bookURL: yup.string().label('Link to book').url().required(),
+  otherAuthors: yup
+    .array()
+    .of(yup.string().label('Other authors').min(OTHER_AUTHOR_FULL_NAME_MIN).max(OTHER_AUTHOR_FULL_NAME_MAX)),
+  description: yup.string().label('Description of the book').required().min(5),
+});
 
-  const initialValues = {
-    name: '',
-    img: '',
-    date: '',
-    genre: '',
-    otherAuthors: [],
-    pagesQuantity: '',
-    isPaid: false,
-    price: '',
-    description: '',
-    bookURL: '',
-  };
+const defaultValues = {
+  name: '',
+  img: '',
+  date: '',
+  genre: '',
+  otherAuthors: [],
+  pagesQuantity: '',
+  isPaid: false,
+  price: '',
+  description: '',
+  bookURL: '',
+};
+
+export default function AddBookForm({ textSubmitButton = 'Add book', onSubmit, initialValues = {} }) {
+  const initialValuesRef = useRef();
+  if (!initialValuesRef.current) {
+    initialValuesRef.current = prepareInitialValues(initialValues, defaultValues);
+  }
 
   return (
-    <Formik initialValues={initialValues} validationSchema={schema} onSubmit={onSubmit}>
+    <Formik initialValues={initialValuesRef.current} validationSchema={schema} onSubmit={onSubmit}>
       {({ isSubmitting, values }) => (
         <FormikForm>
           <FormikFormGroup label="Book name">
@@ -89,7 +95,7 @@ export default function AddBookForm({ onSubmit }) {
             <FormikTextAreaField name="description" required />
           </FormikFormGroup>
           <ButtonWithSpinner type="submit" block loading={isSubmitting}>
-            Add Book
+            {textSubmitButton}
           </ButtonWithSpinner>
         </FormikForm>
       )}

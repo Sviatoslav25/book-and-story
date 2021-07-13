@@ -9,6 +9,7 @@ const paths = {
   story: '/story/:id',
   addStory: '/addStory',
   addBook: '/addBook',
+  editBook: '/books/:id/edit',
 };
 
 export default paths;
