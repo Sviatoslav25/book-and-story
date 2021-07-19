@@ -51,7 +51,7 @@ export default function MyItemCard({ item, refetchItems, nameItem }) {
           >
             <FontAwesomeIcon icon={faTrash} />
           </ButtonWithSpinner>
-          <Link to={generatePath(paths.editBook, { id: item._id })}>
+          <Link to={generatePath(nameItem === BOOKS ? paths.editBook : paths.editStory, { id: item._id })}>
             <ButtonWithSpinner className="ml-3" variant="outline-success">
               <FontAwesomeIcon icon={faEdit} />
             </ButtonWithSpinner>

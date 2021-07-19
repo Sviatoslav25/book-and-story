@@ -6,6 +6,7 @@ import AddBook from '../pages/AddBook';
 import AddStory from '../pages/AddStory';
 import BookDetails from '../pages/BookDetails';
 import EditBook from '../pages/EditBook';
+import EditStory from '../pages/EditStory';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import MyBooks from '../pages/MyBooks';
@@ -64,6 +65,11 @@ const appRouts = [
     path: paths.editBook,
     exact: true,
     Component: EditBook,
+  },
+  {
+    path: paths.editStory,
+    exact: true,
+    Component: EditStory,
   },
 ];
 

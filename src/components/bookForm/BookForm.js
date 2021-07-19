@@ -45,7 +45,7 @@ const defaultValues = {
   bookURL: '',
 };
 
-export default function AddBookForm({ textSubmitButton = 'Add book', onSubmit, initialValues = {} }) {
+export default function BookForm({ textSubmitButton = 'Add book', onSubmit, initialValues = {} }) {
   const initialValuesRef = useRef();
   if (!initialValuesRef.current) {
     initialValuesRef.current = prepareInitialValues(initialValues, defaultValues);

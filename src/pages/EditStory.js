@@ -2,30 +2,31 @@ import React from 'react';
 import { Alert, Card, Col, Container, Row } from 'react-bootstrap';
 import { useHistory, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import BookForm from '../components/bookForm/BookForm';
+import StoryForm from '../components/storyFrom/StoryForm';
 import useAPIMethod from '../hooks/useAPIMethod';
 import useAPIQuery from '../hooks/useAPIQuery';
 import paths from '../router/paths';
 import APIService from '../services/APIService';
 
-export default function EditBook() {
+export default function EditStory() {
   const params = useParams();
   const history = useHistory();
-  const [book, , isLoading, error] = useAPIQuery({ call: APIService.getBook(params.id) });
 
-  const [editBook] = useAPIMethod({
-    call: APIService.updateBook(params.id),
-    onComplete: () => {
-      toast.success('book updated successfully');
-      history.push(paths.myBooks);
-    },
+  const [story, , isLoading, error] = useAPIQuery({ call: APIService.getStory(params.id) });
+
+  const [editStory] = useAPIMethod({
+    call: APIService.updateStory(params.id),
     onError: (e) => {
       toast.error(e.message);
     },
+    onComplete: () => {
+      toast.success('Story updated successfully');
+      history.push(paths.myStories);
+    },
   });
 
-  const onSubmit = (values) => {
-    editBook(values);
+  const onSubmit = (value) => {
+    editStory(value);
   };
 
   if (error) {
@@ -36,7 +37,7 @@ export default function EditBook() {
     );
   }
 
-  if (isLoading && !book) {
+  if (isLoading && !story) {
     return <Container className="mt-4">loading...</Container>;
   }
 
@@ -45,7 +46,7 @@ export default function EditBook() {
       <Col lg={{ span: 6, offset: 3 }} md={{ span: 8, offset: 2 }} sm={{ span: 8 }}>
         <Card>
           <Card.Body>
-            <BookForm textSubmitButton="Edit book" onSubmit={onSubmit} initialValues={book} />
+            <StoryForm onSubmit={onSubmit} textSubmitButton="Edit story" initialValues={story} />
           </Card.Body>
         </Card>
       </Col>

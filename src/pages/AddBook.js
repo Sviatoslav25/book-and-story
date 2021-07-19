@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import AddBookForm from '../components/addBookForm/AddBookForm';
+import BookForm from '../components/bookForm/BookForm';
 import useAPIMethod from '../hooks/useAPIMethod';
 import paths from '../router/paths';
 import APIService from '../services/APIService';
@@ -31,7 +31,7 @@ export default function AddBook() {
       <Col lg={{ span: 6, offset: 3 }} md={{ span: 8, offset: 2 }} sm={{ span: 8 }}>
         <Card>
           <Card.Body>
-            <AddBookForm onSubmit={onSubmit} />
+            <BookForm onSubmit={onSubmit} />
           </Card.Body>
         </Card>
       </Col>

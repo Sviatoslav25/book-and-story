@@ -163,7 +163,13 @@ class APIService {
 
   updateBook = (bookId) => {
     return async (bookData) => {
-      return this.#fetch({ url: `/api/books/edit/${bookId}`, method: 'post', data: { bookData } });
+      return this.#fetch({ url: `/api/books/update/${bookId}`, method: 'post', data: { bookData } });
+    };
+  };
+
+  updateStory = (storyId) => {
+    return async (storyData) => {
+      return this.#fetch({ url: `/api/stories/update/${storyId}`, method: 'post', data: { storyData } });
     };
   };
 }
