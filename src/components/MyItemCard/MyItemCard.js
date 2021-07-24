@@ -5,26 +5,29 @@ import { Card } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { generatePath, Link } from 'react-router-dom';
 import { BOOKS } from '../../constants/settings';
-import useAPIMethod from '../../hooks/useAPIMethod';
-import APIService from '../../services/APIService';
 import ButtonWithSpinner from '../common/ButtonWithSpinner';
-import ModalDialogForDeleteItem from '../ModalDialogForDeleteItem/ModalDialogForDeleteItem';
 import paths from '../../router/paths';
+import ModalDialog from '../ModalDialog/ModalDialog';
+import useDeleteItem from '../../hooks/useDeleteItem';
 
 const storyImg =
   'https://images-platform.99static.com//4sAE0-g_qA0-XAYWunH9YKSpsQ8=/160x139:837x816/fit-in/500x500/99designs-contests-attachments/110/110993/attachment_110993584';
 
 export default function MyItemCard({ item, refetchItems, nameItem }) {
   const [isVisibleModalDialog, setIsVisibleModalDialog] = useState(false);
-  const [deleteItem, isDeleting] = useAPIMethod({
-    call: nameItem === BOOKS ? APIService.deleteBook : APIService.deleteStory,
-    onComplete: refetchItems,
+  const [deleteItem, { loading: isDeleting }] = useDeleteItem(nameItem, {
+    onCompleted: refetchItems,
     onError: (e) => {
       toast.error(e.message);
     },
   });
+
   const onDeleteItem = () => {
-    deleteItem(item._id);
+    if (nameItem === BOOKS) {
+      deleteItem({ variables: { bookId: item._id } });
+    } else {
+      deleteItem({ variables: { storyId: item._id } });
+    }
     setIsVisibleModalDialog(false);
   };
 
@@ -32,10 +35,13 @@ export default function MyItemCard({ item, refetchItems, nameItem }) {
     <>
       <Card>
         {isVisibleModalDialog ? (
-          <ModalDialogForDeleteItem
+          <ModalDialog
             show={isVisibleModalDialog}
             handleClose={setIsVisibleModalDialog}
             confirmed={onDeleteItem}
+            headerText="Confirm deletion"
+            bodyText="Are you sure that you want to delete this element?"
+            confirmButtonText="Delete"
           />
         ) : null}
         <Card.Img alt={`${item.name} image`} variant="top" src={nameItem === BOOKS ? item.img : storyImg} />

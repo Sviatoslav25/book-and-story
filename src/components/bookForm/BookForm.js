@@ -21,7 +21,7 @@ const OTHER_AUTHOR_FULL_NAME_MAX = 60;
 const schema = yup.object().shape({
   name: yup.string().label('name').required().min(NAME_MIN).max(NAME_MAX),
   img: yup.string().label('Image URL').url().required(),
-  date: yup.date().label('Book release date').required(),
+  // releaseDate: yup.date().label('Book release date').required(),
   genre: yup.string().label('Book genre').required().min(GENRE_MIN).max(GENRE_MAX),
   price: yup.number().label('Book price'),
   pagesQuantity: yup.number().label('Pages quantity').required().min(PAGE_QUANTITY_MIN).max(PAGE_QUANTITY_MAX),
@@ -35,7 +35,7 @@ const schema = yup.object().shape({
 const defaultValues = {
   name: '',
   img: '',
-  date: '',
+  // releaseDate: '',
   genre: '',
   otherAuthors: [],
   pagesQuantity: '',
@@ -61,9 +61,9 @@ export default function BookForm({ textSubmitButton = 'Add book', onSubmit, init
           <FormikFormGroup label="Image URL">
             <FormikFormControl name="img" placeholder="Enter url" required type="url" />
           </FormikFormGroup>
-          <FormikFormGroup label="Book release date">
-            <FormikFormControl name="date" placeholder="Enter book release date" required type="date" />
-          </FormikFormGroup>
+          {/* <FormikFormGroup label="Book release date">
+            <FormikFormControl name="releaseDate" placeholder="Enter book release date" required type="date" />
+          </FormikFormGroup> */}
           <FormikFormGroup label="Book genre">
             <FormikFormControl name="genre" placeholder="Enter the genre of the book" required />
           </FormikFormGroup>

@@ -7,11 +7,12 @@ import MockDataService from '../../services/MockDataService';
 import BookCard from '../book/BookCard';
 import Search from '../search/Search';
 import style from './BookList.module.scss';
-import useAPIMethod from '../../hooks/useAPIMethod';
-import useAPIQuery from '../../hooks/useAPIQuery';
-import ItemsFound, { BOOKS } from '../ItemsFound/ItemsFound';
-import APIService from '../../services/APIService';
+import ItemsFound from '../ItemsFound/ItemsFound';
 import ButtonWithSpinner from '../common/ButtonWithSpinner';
+import useAddBooks from '../../hooks/useAddBook';
+import useBooks from '../../hooks/useBooks';
+import useAddRatingForBook from '../../hooks/useAddRatingForBook';
+import { BOOKS } from '../../constants/settings';
 
 export default function BookList({ switchToStories }) {
   const [idOfSelectedBook, setIdOfSelectedBook] = useState(null);
@@ -20,27 +21,25 @@ export default function BookList({ switchToStories }) {
   const [lineForSearch, setLineForSearch] = useState('');
   const [isResettingSearch, setIsResettingSearch] = useState(false);
 
-  const [books, fetchBook, isLoading, error] = useAPIQuery({ call: APIService.getBookList });
+  const [books, { loading: isLoading, error, refetch: fetchBook }] = useBooks();
 
-  const [addBook, isAdding] = useAPIMethod({
-    call: APIService.addBook,
-    onComplete: fetchBook,
+  const [addBook, { loading: isAdding }] = useAddBooks({
+    onCompleted: fetchBook,
     onError: (e) => {
       toast.error(e.message);
     },
   });
 
-  const [changeRating, isUpdateRating] = useAPIMethod({
-    call: APIService.changeRantingForBook,
-    onComplete: fetchBook,
+  const [addRating, { loading: isUpdateRating }] = useAddRatingForBook({
+    onCompleted: fetchBook,
     onError: (e) => {
       toast.error(e.message);
     },
   });
 
-  const onChangeRating = async (bookId, newRating) => {
+  const onAddRating = async (bookId, newRating) => {
     setIdOfSelectedBook(bookId);
-    await changeRating({ bookId, rating: newRating });
+    await addRating({ variables: { bookId, rating: newRating } });
     setIdOfSelectedBook(null);
   };
 
@@ -72,7 +71,7 @@ export default function BookList({ switchToStories }) {
         <ButtonWithSpinner
           className={style.addButton}
           onClick={() => {
-            addBook(MockDataService.createBook());
+            addBook({ variables: { input: MockDataService.createBook() } });
           }}
           loading={isAdding}
         >
@@ -85,15 +84,21 @@ export default function BookList({ switchToStories }) {
       </Container>
       {isLoading && !books ? <>Loading...</> : null}
       {isBooksFound ? (
-        <ItemsFound lineForSearch={lineForSearch} setIsSearching={setIsSearchingBooks} nameItems={BOOKS} />
+        <ItemsFound
+          changeRating={onAddRating}
+          isUpdateRating={isUpdateRating}
+          lineForSearch={lineForSearch}
+          setIsSearching={setIsSearchingBooks}
+          nameItems={BOOKS}
+        />
       ) : (
         books?.map((book) => {
           return (
             <Col key={book._id} lg="3" md="4" sm="6" xs="6" className="mt-4">
               {idOfSelectedBook === book._id ? (
-                <BookCard ChangeRating={onChangeRating} book={book} isUpdate={isUpdateRating} />
+                <BookCard addRating={onAddRating} book={book} isUpdate={isUpdateRating} />
               ) : (
-                <BookCard ChangeRating={onChangeRating} book={book} />
+                <BookCard addRating={onAddRating} book={book} />
               )}
             </Col>
           );

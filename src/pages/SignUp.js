@@ -1,19 +1,38 @@
+import { gql, useMutation } from '@apollo/client';
 import { Button, Card, Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import AuthForm from '../components/auth/AuthForm';
-import useAPIMethod from '../hooks/useAPIMethod';
 import paths from '../router/paths';
-import APIService from '../services/APIService';
+import AuthManager from '../services/AuthManager';
+import { getFirstResult } from '../utils/graphql';
+
+const registrationMutation = gql`
+  mutation registration($email: String!, $password: String!) {
+    registration(email: $email, password: $password) {
+      accessToken
+      refreshToken
+    }
+  }
+`;
+
+const useRegistration = (options) => {
+  const [registration, rest] = useMutation(registrationMutation, options);
+  return [registration, rest];
+};
 
 export default function SingUp() {
-  const [registration, isRegistrationIn] = useAPIMethod({
-    call: APIService.registration,
-    onError: (e) => toast.error(e.message),
+  const [registration, { loading: isRegistrationIn }] = useRegistration({
+    onCompleted: (result) => {
+      AuthManager.login(getFirstResult(result));
+    },
+    onError: (e) => {
+      toast.error(e.message);
+    },
   });
 
-  const Submit = ({ email, password }) => {
-    registration({ email, password });
+  const Submit = (data) => {
+    registration({ variables: data });
   };
 
   return (

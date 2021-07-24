@@ -1,34 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, Col } from 'react-bootstrap';
-import { toast } from 'react-toastify';
-import useAPIMethod from '../../hooks/useAPIMethod';
-import useAPIQuery from '../../hooks/useAPIQuery';
 import StoryCard from '../story/StoryCard';
 import BookCard from '../book/BookCard';
-import APIService from '../../services/APIService';
+import useItemsSearch from '../../hooks/useItemsSearch';
+import { BOOKS, STORIES } from '../../constants/settings';
 
-export const BOOKS = 'BOOKS';
-export const STORIES = 'STORIES';
-
-export default function ItemsFound({ lineForSearch, setIsSearching, nameItems }) {
+export default function ItemsFound({ lineForSearch, setIsSearching, changeRating, isUpdateRating, nameItems }) {
   const [idOfSelectedItem, setIdOfSelectedItem] = useState(null);
-  const [foundItems, refetchFoundItems, isLoading, error] = useAPIQuery({
-    call: nameItems === BOOKS ? APIService.searchBooks(lineForSearch) : APIService.searchStories(lineForSearch),
-  });
-  const [changeRating, isUpdateRating] = useAPIMethod({
-    call: nameItems === BOOKS ? APIService.changeRantingForBook : APIService.changeRantingForStories,
-    onComplete: refetchFoundItems,
-    onError: (e) => {
-      toast.error(e.message);
-    },
-  });
+  const [foundItems, { loading: isLoading, error, refetch: refetchFoundItems }] = useItemsSearch(
+    nameItems,
+    lineForSearch
+  );
 
   const onChangeRating = async (itemId, newRating) => {
     setIdOfSelectedItem(itemId);
     if (nameItems === BOOKS) {
-      await changeRating({ bookId: itemId, rating: newRating });
+      await changeRating(itemId, newRating);
     } else if (nameItems === STORIES) {
-      await changeRating({ storyId: itemId, rating: newRating });
+      await changeRating(itemId, newRating);
     }
     setIdOfSelectedItem(null);
   };
@@ -49,9 +38,9 @@ export default function ItemsFound({ lineForSearch, setIsSearching, nameItems })
             return (
               <Col key={book._id} lg="3" md="4" sm="6" xs="6" className="mt-4">
                 {idOfSelectedItem === book._id ? (
-                  <BookCard ChangeRating={onChangeRating} book={book} isUpdate={isUpdateRating} />
+                  <BookCard addRating={onChangeRating} book={book} isUpdate={isUpdateRating} />
                 ) : (
-                  <BookCard ChangeRating={onChangeRating} book={book} />
+                  <BookCard addRating={onChangeRating} book={book} />
                 )}
               </Col>
             );
@@ -60,9 +49,9 @@ export default function ItemsFound({ lineForSearch, setIsSearching, nameItems })
             return (
               <Col key={story._id} lg="3" md="4" sm="6" xs="6" className="mt-4">
                 {idOfSelectedItem === story._id ? (
-                  <StoryCard ChangeRating={onChangeRating} story={story} isUpdate={isUpdateRating} />
+                  <StoryCard addRating={onChangeRating} story={story} isUpdate={isUpdateRating} />
                 ) : (
-                  <StoryCard ChangeRating={onChangeRating} story={story} />
+                  <StoryCard addRating={onChangeRating} story={story} />
                 )}
               </Col>
             );

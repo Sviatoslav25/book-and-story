@@ -3,26 +3,23 @@ import { Card, Col, Row } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import StoryForm from '../components/storyFrom/StoryForm';
-import useAPIMethod from '../hooks/useAPIMethod';
+import useAddStory from '../hooks/useAddStory';
 import paths from '../router/paths';
-import APIService from '../services/APIService';
 
 export default function AddStory() {
   const history = useHistory();
-
-  const [addStory] = useAPIMethod({
-    call: APIService.addStory,
+  const [addStory] = useAddStory({
     onError: (e) => {
       toast.error(e.message);
     },
-    onComplete: () => {
+    onCompleted: () => {
       toast.success('Story created successfully');
       history.push(paths.home);
     },
   });
 
-  const onSubmit = (values) => {
-    addStory(values);
+  const onSubmit = async (values) => {
+    await addStory({ variables: { input: values } });
   };
   return (
     <Row className="mt-5">

@@ -5,9 +5,9 @@ import ChangeRatingStart from '../RatingStar/ChangeRantingStart';
 import RatingStart from '../RatingStar/RatingStart';
 import style from './BookCard.module.scss';
 
-export default function BookCard({ book, ChangeRating, isUpdate }) {
+export default function BookCard({ book, addRating, isUpdate }) {
   const addBookIdForChangeRating = (newRating) => {
-    ChangeRating(book._id, newRating);
+    addRating(book._id, newRating);
   };
 
   return (

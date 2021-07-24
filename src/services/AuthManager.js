@@ -28,6 +28,7 @@ class AuthManager {
 
   eventTypes = {
     LOGIN_STATUS_CHANGE: 'LOGIN_STATUS_CHANGE',
+    LOGOUT: 'LOGOUT',
   };
 
   isLoggedIn() {
@@ -44,6 +45,7 @@ class AuthManager {
     localStorage.removeItem(this.accessTokenKey);
     localStorage.removeItem(this.refreshTokenKey);
     this.emitter.emit(this.eventTypes.LOGIN_STATUS_CHANGE, false);
+    this.emitter.emit(this.eventTypes.LOGOUT);
   }
 
   registration({ accessToken, refreshToken }) {
@@ -56,6 +58,13 @@ class AuthManager {
 
   offLoginStatusChange(sb) {
     this.emitter.off(this.eventTypes.LOGIN_STATUS_CHANGE, sb);
+  }
+
+  onLogout(cb) {
+    this.emitter.on(this.eventTypes.LOGOUT, cb);
+    return () => {
+      this.emitter.off(this.eventTypes.LOGOUT, cb);
+    };
   }
 
   isAccessTokenExpired = () => {

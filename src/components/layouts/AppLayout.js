@@ -1,9 +1,27 @@
-import { Button, Container, Nav, Navbar } from 'react-bootstrap';
+import { Container, Nav, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import useCurrentUser from '../../hooks/useCurrentUser';
+import useLogout from '../../hooks/useLogout';
 import paths from '../../router/paths';
 import AuthManager from '../../services/AuthManager';
+import ButtonWithSpinner from '../common/ButtonWithSpinner';
 
 export default function AppLayout({ children }) {
+  const [user] = useCurrentUser();
+  const [logout, { loading: isLoading }] = useLogout({
+    onError: (e) => {
+      toast.error(e.message);
+    },
+    onCompleted: () => {
+      AuthManager.logout();
+    },
+  });
+
+  const onLogout = () => {
+    logout({ variables: { token: AuthManager.getRefreshToken() } });
+  };
+
   return (
     <>
       <Navbar bg="light" expand="lg">
@@ -21,14 +39,12 @@ export default function AppLayout({ children }) {
             my Stories
           </Nav.Link>
         </Nav>
-        <Button
-          variant="outline-secondary"
-          onClick={() => {
-            AuthManager.logout();
-          }}
-        >
-          logout
-        </Button>
+        <Nav>
+          <Nav.Item className="mr-2 mt-1">{user?.email}</Nav.Item>
+          <ButtonWithSpinner loading={isLoading} variant="outline-secondary" onClick={onLogout}>
+            logout
+          </ButtonWithSpinner>
+        </Nav>
       </Navbar>
       <Container>{children}</Container>
     </>

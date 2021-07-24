@@ -3,17 +3,15 @@ import { Card, Col, Row } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import BookForm from '../components/bookForm/BookForm';
-import useAPIMethod from '../hooks/useAPIMethod';
+import useAddBook from '../hooks/useAddBook';
 import paths from '../router/paths';
-import APIService from '../services/APIService';
 
 export default function AddBook() {
   const history = useHistory();
 
-  const [addBook] = useAPIMethod({
-    call: APIService.addBook,
+  const [addBook] = useAddBook({
     onError: (e) => toast.error(e.message),
-    onComplete: () => {
+    onCompleted: () => {
       toast.success('Book created successfully');
       history.push(paths.home);
     },
@@ -21,9 +19,9 @@ export default function AddBook() {
 
   const onSubmit = async (value) => {
     if (value.isPaid) {
-      await addBook(value);
+      await addBook({ variables: { input: value } });
     } else {
-      await addBook({ ...value, price: '' });
+      await addBook({ variables: { input: { ...value, price: 0 } } });
     }
   };
   return (

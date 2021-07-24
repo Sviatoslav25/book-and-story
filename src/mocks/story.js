@@ -15,7 +15,6 @@ export function dataForStoryFromForm() {
 export function storyFactory() {
   return {
     name: faker.lorem.words(),
-    date: faker.date.past(),
     genre: faker.lorem.words(),
     shortDescription: faker.lorem.paragraph(),
     story: faker.lorem.paragraphs(),

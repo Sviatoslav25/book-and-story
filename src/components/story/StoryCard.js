@@ -8,9 +8,9 @@ import style from './StoryCard.module.scss';
 const storyImg =
   'https://images-platform.99static.com//4sAE0-g_qA0-XAYWunH9YKSpsQ8=/160x139:837x816/fit-in/500x500/99designs-contests-attachments/110/110993/attachment_110993584';
 
-export default function StoryCard({ story, ChangeRating, isUpdate }) {
+export default function StoryCard({ story, addRating, isUpdate }) {
   const addBookIdForChangeRating = (newRating) => {
-    ChangeRating(story._id, newRating);
+    addRating(story._id, newRating);
   };
 
   return (

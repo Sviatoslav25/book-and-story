@@ -1,22 +1,30 @@
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 
-export default function ModalDialogForDeleteItem({ show, handleClose, confirmed }) {
+export default function ModalDialog({
+  show,
+  handleClose,
+  confirmed,
+  headerText = 'Confirm',
+  bodyText = '',
+  closeButtonText = 'Close',
+  confirmButtonText = 'Confirm',
+}) {
   const onClose = () => {
     handleClose(false);
   };
   return (
     <Modal show={show} onHide={onClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Confirm deletion</Modal.Title>
+        <Modal.Title>{headerText}</Modal.Title>
       </Modal.Header>
-      <Modal.Body>Are you sure that you want to delete this element?</Modal.Body>
+      <Modal.Body>{bodyText}</Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onClose}>
-          Close
+          {closeButtonText}
         </Button>
         <Button variant="danger" onClick={confirmed}>
-          delete
+          {confirmButtonText}
         </Button>
       </Modal.Footer>
     </Modal>

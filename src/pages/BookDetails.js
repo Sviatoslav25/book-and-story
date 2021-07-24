@@ -1,12 +1,12 @@
 import { Card, Container, Alert } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import useAPIQuery from '../hooks/useAPIQuery';
+import useBookById from '../hooks/useBookById';
 import style from '../pagesStyle/BookDetails.module.scss';
-import APIService from '../services/APIService';
 
 export default function BookDetails() {
   const params = useParams();
-  const [book, , isLoading, error] = useAPIQuery({ call: APIService.getBook(params.id) });
+
+  const [book, { loading: isLoading, error }] = useBookById(params.id);
 
   if (error) {
     return (

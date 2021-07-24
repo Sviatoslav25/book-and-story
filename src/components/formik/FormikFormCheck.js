@@ -1,6 +1,7 @@
 import { useField } from 'formik';
 import React from 'react';
-import { Form } from 'react-bootstrap';
+import { Form, InputGroup } from 'react-bootstrap';
+import style from './FormikFormCheck.module.scss';
 
 export default function FormikFormCheck({ label, name }) {
   const [field, , helpers] = useField(name);
@@ -8,7 +9,24 @@ export default function FormikFormCheck({ label, name }) {
   const { onBlur, value } = field;
   return (
     <Form.Group>
-      <Form.Check
+      <InputGroup>
+        <Form.Label>{label}</Form.Label>
+        <Form.Control
+          size="sm"
+          className={style.check}
+          style={{ width: '20px' }}
+          onBlur={onBlur}
+          onClick={(e) => {
+            setValue(e.target.checked);
+          }}
+          defaultChecked={value}
+          value={value}
+          type="checkbox"
+          // label={label}
+        />
+      </InputGroup>
+
+      {/* <Form.Check
         onBlur={onBlur}
         onClick={(e) => {
           setValue(e.target.checked);
@@ -16,7 +34,8 @@ export default function FormikFormCheck({ label, name }) {
         value={value}
         type="checkbox"
         label={label}
-      />
+        feedbackTooltip={value}
+      /> */}
     </Form.Group>
   );
 }

@@ -17,7 +17,6 @@ const STORY_MIN = 10;
 
 const defaultValues = {
   name: '',
-  date: '',
   genre: '',
   shortDescription: '',
   story: '',
@@ -25,7 +24,6 @@ const defaultValues = {
 
 const schema = yup.object().shape({
   name: yup.string().label('Story name').required().min(NAME_MIN).max(NAME_MAX),
-  date: yup.date().required(),
   genre: yup.string().required().min(GENRE_MIN).max(GENRE_MAX),
   shortDescription: yup.string().required().min(SORT_DESCRIPTION_MIN).max(SORT_DESCRIPTION_MAX),
   story: yup.string().required().min(STORY_MIN),
@@ -43,9 +41,6 @@ export default function StoryForm({ onSubmit, textSubmitButton = 'Add story', in
         <FormikForm>
           <FormikFormGroup label="Story name">
             <FormikFormControl name="name" placeholder="Enter story name" required />
-          </FormikFormGroup>
-          <FormikFormGroup label="Story release date">
-            <FormikFormControl name="date" placeholder="Enter story release date" required type="date" />
           </FormikFormGroup>
           <FormikFormGroup label="Story genre">
             <FormikFormControl name="genre" placeholder="Enter the genre of the story" required />

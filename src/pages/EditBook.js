@@ -3,19 +3,16 @@ import { Alert, Card, Col, Container, Row } from 'react-bootstrap';
 import { useHistory, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import BookForm from '../components/bookForm/BookForm';
-import useAPIMethod from '../hooks/useAPIMethod';
-import useAPIQuery from '../hooks/useAPIQuery';
+import useBookById from '../hooks/useBookById';
+import useUpdateBook from '../hooks/useUpdateBook';
 import paths from '../router/paths';
-import APIService from '../services/APIService';
 
 export default function EditBook() {
   const params = useParams();
   const history = useHistory();
-  const [book, , isLoading, error] = useAPIQuery({ call: APIService.getBook(params.id) });
-
-  const [editBook] = useAPIMethod({
-    call: APIService.updateBook(params.id),
-    onComplete: () => {
+  const [book, { loading: isLoading, error }] = useBookById(params.id, { fetchPolicy: 'network-only' });
+  const [editBook] = useUpdateBook({
+    onCompleted: () => {
       toast.success('book updated successfully');
       history.push(paths.myBooks);
     },
@@ -25,7 +22,11 @@ export default function EditBook() {
   });
 
   const onSubmit = (values) => {
-    editBook(values);
+    let input = values;
+    if (!values.isPaid) {
+      input = { ...input, price: 0 };
+    }
+    editBook({ variables: { bookId: params.id, input } });
   };
 
   if (error) {

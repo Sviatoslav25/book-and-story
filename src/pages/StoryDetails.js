@@ -1,12 +1,11 @@
 import { Alert, Card, Container } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import useAPIQuery from '../hooks/useAPIQuery';
+import useStoryById from '../hooks/useStoryById';
 import style from '../pagesStyle/StoryDetails.module.scss';
-import APIService from '../services/APIService';
 
 export default function StoryDetails() {
   const params = useParams();
-  const [story, , isLoading, error] = useAPIQuery({ call: APIService.getStory(params.id) });
+  const [story, { loading: isLoading, error }] = useStoryById(params.id);
 
   if (error) {
     return (

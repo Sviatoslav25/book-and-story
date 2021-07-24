@@ -94,6 +94,7 @@ export default function AuthForm({ Submit, isLoginForm, isLoading }) {
         </Form.Group>
       ) : null}
       <ButtonWithSpinner
+        loading={isLoading}
         disabled={!isValidatedEmail || !isValidatedPassword || !email || !password || isLoading || false}
         variant="primary"
         type="submit"

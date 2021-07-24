@@ -28,7 +28,7 @@ class APIService {
         }
 
         try {
-          await this.#refreshToken();
+          await this.refreshToken();
         } catch {
           throw new Error(errors.TOKEN_EXPIRED);
         }
@@ -41,14 +41,14 @@ class APIService {
 
   #tryRefreshingOrLoutAndThrow = async () => {
     try {
-      await this.#refreshToken();
+      await this.refreshToken();
     } catch (e) {
       this.logout();
       throw new Error(errors.TOKEN_EXPIRED);
     }
   };
 
-  #refreshToken = async () => {
+  refreshToken = async () => {
     const refreshToken = AuthManager.getRefreshToken();
     const {
       data: { accessToken },
