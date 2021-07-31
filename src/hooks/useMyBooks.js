@@ -8,6 +8,7 @@ const myBooksQuery = gql`
       name
       description
       img
+      isPrivate
     }
   }
 `;

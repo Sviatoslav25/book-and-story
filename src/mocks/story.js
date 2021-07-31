@@ -18,5 +18,6 @@ export function storyFactory() {
     genre: faker.lorem.words(),
     shortDescription: faker.lorem.paragraph(),
     story: faker.lorem.paragraphs(),
+    isPrivate: false,
   };
 }

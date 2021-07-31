@@ -1,12 +1,46 @@
-import { Card, Container, Alert } from 'react-bootstrap';
+/* eslint-disable no-nested-ternary */
+import { faBookmark, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Card, Container, Alert, Row, Col, Image, Spinner } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import RatingStart from '../components/RatingStar/RatingStart';
+import { BOOKS } from '../constants/settings';
 import useBookById from '../hooks/useBookById';
-import style from '../pagesStyle/BookDetails.module.scss';
+import useAddItemToFavorites from '../hooks/useAddItemToFavorites';
+import useRemoveItemFromFavorites from '../hooks/useRemoveItemFromFavorites';
 
 export default function BookDetails() {
   const params = useParams();
 
-  const [book, { loading: isLoading, error }] = useBookById(params.id);
+  const [book, { loading: isLoading, error, refetch: refetchBook }] = useBookById(params.id);
+
+  const [addBookToFavorites, { loading: IsAddingBookToFavorites }] = useAddItemToFavorites(BOOKS, {
+    onCompleted: () => {
+      toast.success('Book added to favorites successfully');
+      refetchBook();
+    },
+    onError: (e) => {
+      toast.error(e.message);
+    },
+  });
+  const [removeBookFromFavorites, { loading: isRemovingBookFromFavorites }] = useRemoveItemFromFavorites(BOOKS, {
+    onCompleted: () => {
+      toast.success('Book removed from favorites successfully');
+      refetchBook();
+    },
+    onError: (e) => {
+      toast.error(e.message);
+    },
+  });
+
+  const onAddBookToFavorites = () => {
+    addBookToFavorites({ variables: { bookId: params.id } });
+  };
+
+  const onRemoveBookFromFavorites = () => {
+    removeBookFromFavorites({ variables: { bookId: params.id } });
+  };
 
   if (error) {
     return (
@@ -16,27 +50,67 @@ export default function BookDetails() {
     );
   }
   return (
-    <>
-      <Container className="mt-4">
-        {isLoading || !book ? (
-          'loading...'
-        ) : (
-          <Card>
-            <Card.Img className={style.bookImage} alt={`${book.name} image`} variant="top" src={book.img} />
+    <Container className="mt-4">
+      {isLoading || !book ? (
+        'loading...'
+      ) : (
+        <>
+          <Row>
+            <Col md={5}>
+              <Image
+                src={book.img}
+                alt={book.name}
+                rounded
+                style={{ width: 'auto', maxHeight: 300, objectFit: 'cover' }}
+              />
+            </Col>
+            <Col>
+              <Card border="light">
+                <Card.Body>
+                  <Card.Title
+                    style={{ fontSize: '30px', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}
+                  >
+                    {book.name}
+                    {IsAddingBookToFavorites || isRemovingBookFromFavorites ? (
+                      <Spinner
+                        animation="border"
+                        variant="primary"
+                        style={{ marginLeft: 'auto', marginRight: '5px' }}
+                      />
+                    ) : book.isFavorite ? (
+                      <FontAwesomeIcon
+                        onClick={onRemoveBookFromFavorites}
+                        style={{ marginLeft: 'auto', marginRight: '5px', cursor: 'pointer' }}
+                        title="Remove from favorites"
+                        icon={faTimes}
+                      />
+                    ) : (
+                      <FontAwesomeIcon
+                        onClick={onAddBookToFavorites}
+                        style={{ marginLeft: 'auto', marginRight: '5px', cursor: 'pointer' }}
+                        title="Add to favorites"
+                        icon={faBookmark}
+                      />
+                    )}
+                  </Card.Title>
+                  <Card.Link href={book.bookURL}>Read</Card.Link>
+                  <Card.Title>genre: {book.genre}</Card.Title>
+                  {book.isPaid && <Card.Title>{book.price}</Card.Title>}
+                  <Card.Title>Number of pages: {book.pagesQuantity}</Card.Title>
+                  <RatingStart rating={book.rating} />
+                  <Card.Text style={{ textAlign: 'right' }}>Author: {book.author.email}</Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+          <Card className="mt-5">
             <Card.Body>
-              <Card.Title>{book.name}</Card.Title>
-              <Card.Text>Description:{book.description}</Card.Text>
-              <Card.Text>
-                Authors:
-                {book.otherAuthors.map((item) => {
-                  return item;
-                })}
-              </Card.Text>
-              <a href={book.bookSrc}>Book</a>
+              <Card.Title>Description</Card.Title>
+              <Card.Text>{book.description}</Card.Text>
             </Card.Body>
           </Card>
-        )}
-      </Container>
-    </>
+        </>
+      )}
+    </Container>
   );
 }

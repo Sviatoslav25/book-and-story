@@ -1,11 +1,44 @@
-import { Alert, Card, Container } from 'react-bootstrap';
+/* eslint-disable no-nested-ternary */
+import { faBookmark, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Alert, Card, Col, Container, Image, Row, Spinner } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import RatingStart from '../components/RatingStar/RatingStart';
+import { STORIES } from '../constants/settings';
+import useAddItemToFavorites from '../hooks/useAddItemToFavorites';
+import useRemoveItemFromFavorites from '../hooks/useRemoveItemFromFavorites';
 import useStoryById from '../hooks/useStoryById';
-import style from '../pagesStyle/StoryDetails.module.scss';
 
 export default function StoryDetails() {
   const params = useParams();
-  const [story, { loading: isLoading, error }] = useStoryById(params.id);
+  const [story, { loading: isLoading, error, refetch: refetchStory }] = useStoryById(params.id);
+
+  const [addStoryToFavorites, { loading: isAddingToFavorites }] = useAddItemToFavorites(STORIES, {
+    onCompleted: () => {
+      toast.success('Story added to favorites successfully');
+      refetchStory();
+    },
+    onError: (e) => {
+      toast.error(e.message);
+    },
+  });
+  const [removeStoryFromFavorites, { loading: isRemovingStoryFromFavorites }] = useRemoveItemFromFavorites(STORIES, {
+    onCompleted: () => {
+      toast.success('Story removed from favorites successfully');
+      refetchStory();
+    },
+    onError: (e) => {
+      toast.error(e.message);
+    },
+  });
+
+  const onAddToFavorites = () => {
+    addStoryToFavorites({ variables: { storyId: params.id } });
+  };
+  const onRemoveStoryFromFavorites = () => {
+    removeStoryFromFavorites({ variables: { storyId: params.id } });
+  };
 
   if (error) {
     return (
@@ -22,13 +55,57 @@ export default function StoryDetails() {
       {isLoading || !story ? (
         'loading...'
       ) : (
-        <Card>
-          <Card.Img className={style.storyImage} alt={`${story.name} image`} variant="top" src={storyImg} />
-          <Card.Body>
-            <Card.Title>Story name: {story.name}</Card.Title>
-            <Card.Text>Story: {story.story}</Card.Text>
-          </Card.Body>
-        </Card>
+        <Row>
+          <Col md={5}>
+            <Image
+              src={storyImg}
+              alt={story.name}
+              rounded
+              style={{ width: '100%', maxHeight: 300, objectFit: 'cover' }}
+            />
+          </Col>
+          <Col>
+            <Card border="light">
+              <Card.Body>
+                <Card.Title
+                  style={{ fontSize: '30px', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}
+                >
+                  {story.name}
+                  {isAddingToFavorites || isRemovingStoryFromFavorites ? (
+                    <Spinner animation="border" variant="primary" style={{ marginLeft: 'auto', marginRight: '5px' }} />
+                  ) : story.isFavorite ? (
+                    <FontAwesomeIcon
+                      onClick={onRemoveStoryFromFavorites}
+                      style={{ marginLeft: 'auto', marginRight: '5px', cursor: 'pointer' }}
+                      title="Remove from favorites"
+                      icon={faTimes}
+                    />
+                  ) : (
+                    <FontAwesomeIcon
+                      onClick={onAddToFavorites}
+                      style={{ marginLeft: 'auto', marginRight: '5px', cursor: 'pointer' }}
+                      title="Add to favorites"
+                      icon={faBookmark}
+                    />
+                  )}
+                </Card.Title>
+                <Card.Title>genre: {story.genre}</Card.Title>
+                <RatingStart rating={story.rating} />
+                <Card.Text style={{ textAlign: 'right' }}>Author: {story.author.email}</Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Card className="mt-5">
+            <Card.Body>
+              <Card.Title>Description</Card.Title>
+              <Card.Text>{story.shortDescription}</Card.Text>
+            </Card.Body>
+            <Card.Body className="mt-5">
+              <Card.Title>Story</Card.Title>
+              <Card.Text>{story.story}</Card.Text>
+            </Card.Body>
+          </Card>
+        </Row>
       )}
     </Container>
   );

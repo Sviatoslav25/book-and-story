@@ -78,10 +78,10 @@ export default function StoryList({ switchToBooks }) {
               <span className="sr-only">Loading...</span>
             </>
           ) : null}
-          addStory(Random Data)
+          Add story(Random Data)
         </Button>
         <Link to={paths.addStory}>
-          <Button className={style.addButton}>addStory</Button>
+          <Button className={style.addButton}>Add story</Button>
         </Link>
       </Container>
       {error ? <Alert variant="danger">{error.message}</Alert> : null}

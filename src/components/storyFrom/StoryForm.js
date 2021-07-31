@@ -6,6 +6,7 @@ import FormikFormControl from '../formik/FormikFormControl';
 import FormikTextAreaField from '../formik/FormikTextAreaField';
 import ButtonWithSpinner from '../common/ButtonWithSpinner';
 import { prepareInitialValues } from '../../utils/form';
+import FormikFormCheck from '../formik/FormikFormCheck';
 
 const NAME_MIN = 3;
 const NAME_MAX = 80;
@@ -20,6 +21,7 @@ const defaultValues = {
   genre: '',
   shortDescription: '',
   story: '',
+  isPrivate: false,
 };
 
 const schema = yup.object().shape({
@@ -45,6 +47,7 @@ export default function StoryForm({ onSubmit, textSubmitButton = 'Add story', in
           <FormikFormGroup label="Story genre">
             <FormikFormControl name="genre" placeholder="Enter the genre of the story" required />
           </FormikFormGroup>
+          <FormikFormCheck name="isPrivate" label="The story is private" />
           <FormikFormGroup label="Short description">
             <FormikTextAreaField name="shortDescription" required />
           </FormikFormGroup>

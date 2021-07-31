@@ -9,6 +9,7 @@ const booksQuery = gql`
       description
       rating
       img
+      userCanAddRating
     }
   }
 `;

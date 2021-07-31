@@ -14,6 +14,12 @@ const bookQuery = gql`
       isPaid
       price
       bookURL
+      authorId
+      author {
+        email
+      }
+      rating
+      isFavorite
     }
   }
 `;

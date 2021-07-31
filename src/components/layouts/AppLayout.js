@@ -38,6 +38,9 @@ export default function AppLayout({ children }) {
           <Nav.Link as={Link} to={paths.myStories}>
             my Stories
           </Nav.Link>
+          <Nav.Link as={Link} to={paths.favorite}>
+            Favorites
+          </Nav.Link>
         </Nav>
         <Nav>
           <Nav.Item className="mr-2 mt-1">{user?.email}</Nav.Item>

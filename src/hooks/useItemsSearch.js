@@ -21,6 +21,7 @@ const booksSearchQuery = gql`
       description
       rating
       img
+      userCanAddRating
     }
   }
 `;

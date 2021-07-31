@@ -43,6 +43,7 @@ const defaultValues = {
   price: '',
   description: '',
   bookURL: '',
+  isPrivate: false,
 };
 
 export default function BookForm({ textSubmitButton = 'Add book', onSubmit, initialValues = {} }) {
@@ -67,7 +68,7 @@ export default function BookForm({ textSubmitButton = 'Add book', onSubmit, init
           <FormikFormGroup label="Book genre">
             <FormikFormControl name="genre" placeholder="Enter the genre of the book" required />
           </FormikFormGroup>
-
+          <FormikFormCheck name="isPrivate" label="The book is private" />
           <FormikFormGroup label="Pages quantity">
             <FormikFormControl
               name="pagesQuantity"

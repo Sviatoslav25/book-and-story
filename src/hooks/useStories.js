@@ -8,6 +8,7 @@ const storiesQuery = gql`
       name
       shortDescription
       rating
+      userCanAddRating
     }
   }
 `;

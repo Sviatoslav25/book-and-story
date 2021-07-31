@@ -75,10 +75,10 @@ export default function BookList({ switchToStories }) {
           }}
           loading={isAdding}
         >
-          addBook(Random Data)
+          Add book(Random Data)
         </ButtonWithSpinner>
         <Link to={paths.addBook}>
-          <Button className={style.addButton}>addBook</Button>
+          <Button className={style.addButton}>Add book</Button>
         </Link>
         {error && !isBooksFound ? <Alert variant="danger">{error.message}</Alert> : null}
       </Container>

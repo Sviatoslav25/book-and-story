@@ -24,5 +24,6 @@ export function bookFactory() {
     price: faker.datatype.number({ min: 60, max: 1000 }),
     description: faker.lorem.paragraph(),
     bookURL: 'https://www.google.com.ua',
+    isPrivate: false,
   };
 }

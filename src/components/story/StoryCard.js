@@ -26,7 +26,7 @@ export default function StoryCard({ story, addRating, isUpdate }) {
         <div>loading...</div>
       ) : (
         <>
-          <ChangeRatingStart ChangeRating={addBookIdForChangeRating} />
+          {story.userCanAddRating && <ChangeRatingStart ChangeRating={addBookIdForChangeRating} />}
           <RatingStart rating={story.rating} />
         </>
       )}

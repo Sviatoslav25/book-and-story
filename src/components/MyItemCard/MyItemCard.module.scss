@@ -1,0 +1,19 @@
+.lockIcon {
+  margin-left: auto;
+  margin-right: 5px;
+}
+
+.cardTitle {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.linkStyle {
+  color: inherit;
+  text-decoration: inherit;
+  &:hover {
+    color: inherit;
+    text-decoration: inherit;
+  }
+}

@@ -9,6 +9,11 @@ const storyQuery = gql`
       shortDescription
       story
       genre
+      rating
+      author {
+        email
+      }
+      isFavorite
     }
   }
 `;
