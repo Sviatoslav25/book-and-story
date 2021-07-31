@@ -1,2 +1,2 @@
-/api/*    https://book-and-story-backend.herokuapp.com/:splat    200
+/graphql/*    https://book-and-story-backend.herokuapp.com/graphql/:splat    200
 /*    /index.html   200
