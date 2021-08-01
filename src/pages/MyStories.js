@@ -4,17 +4,15 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import MyItemCard from '../components/MyItemCard/MyItemCard';
 import { STORIES } from '../constants/settings';
-import useAPIMethod from '../hooks/useAPIMethod';
-import useAPIQuery from '../hooks/useAPIQuery';
+import useAddStory from '../hooks/useAddStory';
+import useMyStories from '../hooks/useMyStory';
 import paths from '../router/paths';
-import APIService from '../services/APIService';
 import MockDataService from '../services/MockDataService';
 
 export default function MyStories() {
-  const [stories, refetchStories, isLoading, error] = useAPIQuery({ call: APIService.getCurrentUserStories });
-  const [addStory, isAdding] = useAPIMethod({
-    call: APIService.addStory,
-    onComplete: refetchStories,
+  const [stories, { refetch: refetchStories, loading: isLoading, error }] = useMyStories();
+  const [addStory, { loading: isAdding }] = useAddStory({
+    onCompleted: refetchStories,
     onError: (e) => {
       toast.error(e.message);
     },
@@ -23,7 +21,7 @@ export default function MyStories() {
     <Container className="mt-3">
       <Button
         onClick={() => {
-          addStory(MockDataService.createStory());
+          addStory({ variables: { input: MockDataService.createStory() } });
         }}
         disabled={isAdding}
       >

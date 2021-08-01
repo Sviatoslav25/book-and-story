@@ -95,10 +95,7 @@ export default function MyItemCard({ item, refetchItems, nameItem }) {
               <Spinner className={style.lockIcon} animation="border" variant="secondary" />
             ) : (
               <FontAwesomeIcon
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  e.nativeEvent.stopImmediatePropagation();
+                onClick={() => {
                   setIsVisibleModalDialogToChangePrivacy(true);
                 }}
                 className={style.lockIcon}
