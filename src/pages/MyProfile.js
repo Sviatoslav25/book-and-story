@@ -3,5 +3,5 @@ import useMyProfile from '../hooks/useMyProfile';
 
 export default function MyProfile() {
   const [profile, { loading: isLoading, error }] = useMyProfile();
-  return <Profile profile={profile} isLoading={isLoading} error={error} />;
+  return <Profile profile={profile} isLoading={isLoading} error={error} isMyProfile />;
 }

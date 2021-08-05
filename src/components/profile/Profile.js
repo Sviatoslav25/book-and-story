@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { PROFILE_PHOTO } from '../../constants/settings';
 import paths from '../../router/paths';
 
-export default function Profile({ error, isLoading, profile }) {
+export default function Profile({ error, isLoading, profile, isMyProfile }) {
   if (error) {
     return (
       <Container className="mt-4">
@@ -41,9 +41,11 @@ export default function Profile({ error, isLoading, profile }) {
                   style={{ fontSize: '25px', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}
                 >
                   {profile.nickname || 'none'}
-                  <Link style={{ marginLeft: 'auto', marginRight: '5px', cursor: 'pointer' }} to={paths.editProfile}>
-                    <FontAwesomeIcon title="Edit profile information" icon={faCog} />
-                  </Link>
+                  {isMyProfile && (
+                    <Link style={{ marginLeft: 'auto', marginRight: '5px', cursor: 'pointer' }} to={paths.editProfile}>
+                      <FontAwesomeIcon title="Edit profile information" icon={faCog} />
+                    </Link>
+                  )}
                 </Card.Title>
                 <ListGroup className="list-group-flush">
                   <ListGroupItem>Full name: {profile.fullName || 'none'}</ListGroupItem>
