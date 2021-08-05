@@ -3,13 +3,13 @@ import { Alert, Card, Col, Container, Row } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import ProfileForm from '../components/profileForm.js/ProfileForm';
-import useMyProfile from '../hooks/useMyProfile';
+import useProfile from '../hooks/useProfile';
 import useUpdateProfile from '../hooks/useUpdateProfile';
 import paths from '../router/paths';
 
 export default function EditProfile() {
   const history = useHistory();
-  const [profile, { loading: isLoading, error }] = useMyProfile();
+  const [profile, { loading: isLoading, error }] = useProfile();
   const [editProfile] = useUpdateProfile({
     onCompleted: () => {
       toast.success('Profile updated successfully');

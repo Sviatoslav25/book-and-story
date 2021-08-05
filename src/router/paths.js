@@ -4,7 +4,7 @@ const paths = {
   signUp: '/sign-up',
   myStories: '/my-stories',
   myBooks: '/my-books',
-  profile: '/profile',
+  myProfile: '/my-profile',
   book: '/book/:id',
   story: '/story/:id',
   addStory: '/addStory',
@@ -14,6 +14,7 @@ const paths = {
   favorite: '/favorite',
   editProfile: '/profile/edit',
   users: '/users',
+  userProfile: '/user-profile/:id',
 };
 
 export default paths;

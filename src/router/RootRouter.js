@@ -16,9 +16,10 @@ import StoryDetails from '../pages/StoryDetails';
 import AuthManager from '../services/AuthManager';
 import Favorites from '../components/favorites/Favorites';
 import paths from './paths';
-import Profile from '../pages/Profile';
+import MyProfile from '../pages/MyProfile';
 import EditProfile from '../pages/EditProfile';
 import Users from '../pages/Users';
+import UserProfile from '../pages/UserProfile';
 
 const authRouts = [
   {
@@ -81,9 +82,9 @@ const appRouts = [
     Component: Favorites,
   },
   {
-    path: paths.profile,
+    path: paths.myProfile,
     exact: true,
-    Component: Profile,
+    Component: MyProfile,
   },
   {
     path: paths.editProfile,
@@ -94,6 +95,11 @@ const appRouts = [
     path: paths.users,
     exact: true,
     Component: Users,
+  },
+  {
+    path: paths.userProfile,
+    exact: true,
+    Component: UserProfile,
   },
 ];
 

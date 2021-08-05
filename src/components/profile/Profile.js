@@ -1,15 +1,11 @@
-/* eslint-disable no-nested-ternary */
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Card, Container, Alert, Row, Col, ListGroupItem, ListGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { PROFILE_PHOTO } from '../constants/settings';
-import useMyProfile from '../hooks/useMyProfile';
-import paths from '../router/paths';
+import { PROFILE_PHOTO } from '../../constants/settings';
+import paths from '../../router/paths';
 
-export default function Profile() {
-  const [profile, { loading: isLoading, error }] = useMyProfile();
-
+export default function Profile({ error, isLoading, profile }) {
   if (error) {
     return (
       <Container className="mt-4">
