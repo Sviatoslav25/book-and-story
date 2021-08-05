@@ -12,6 +12,8 @@ const paths = {
   editBook: '/books/:id/edit',
   editStory: '/stories/:id/edit',
   favorite: '/favorite',
+  editProfile: '/profile/edit',
+  users: '/users',
 };
 
 export default paths;

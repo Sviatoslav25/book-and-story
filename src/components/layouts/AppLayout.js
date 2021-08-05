@@ -41,9 +41,14 @@ export default function AppLayout({ children }) {
           <Nav.Link as={Link} to={paths.favorite}>
             Favorites
           </Nav.Link>
+          <Nav.Link as={Link} to={paths.users}>
+            Users
+          </Nav.Link>
         </Nav>
         <Nav>
-          <Nav.Item className="mr-2 mt-1">{user?.email}</Nav.Item>
+          <Nav.Link as={Link} to={paths.profile} className="mr-2 mt-1">
+            {user?.email}
+          </Nav.Link>
           <ButtonWithSpinner loading={isLoading} variant="outline-secondary" onClick={onLogout}>
             logout
           </ButtonWithSpinner>
