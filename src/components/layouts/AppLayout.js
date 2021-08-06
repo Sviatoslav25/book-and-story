@@ -1,4 +1,6 @@
 import { Container, Nav, Navbar } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import useCurrentUser from '../../hooks/useCurrentUser';
@@ -48,6 +50,9 @@ export default function AppLayout({ children }) {
         <Nav>
           <Nav.Link as={Link} to={paths.myProfile} className="mr-2 mt-1">
             {user?.email}
+          </Nav.Link>
+          <Nav.Link as={Link} to={paths.notices} className="mr-2 mt-1">
+            <FontAwesomeIcon icon={faExclamationCircle} />
           </Nav.Link>
           <ButtonWithSpinner loading={isLoading} variant="outline-secondary" onClick={onLogout}>
             logout

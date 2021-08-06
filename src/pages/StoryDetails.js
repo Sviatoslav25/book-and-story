@@ -56,7 +56,7 @@ export default function StoryDetails() {
         'loading...'
       ) : (
         <Row>
-          <Col md={5}>
+          <Col lg="3" md="4" sm="4" xs="5">
             <Image
               src={storyImg}
               alt={story.name}

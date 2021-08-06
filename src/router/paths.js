@@ -15,6 +15,7 @@ const paths = {
   editProfile: '/profile/edit',
   users: '/users',
   userProfile: '/user-profile/:id',
+  notices: '/notices',
 };
 
 export default paths;

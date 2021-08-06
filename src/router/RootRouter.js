@@ -20,6 +20,7 @@ import MyProfile from '../pages/MyProfile';
 import EditProfile from '../pages/EditProfile';
 import Users from '../pages/Users';
 import UserProfile from '../pages/UserProfile';
+import Notices from '../pages/Notices';
 
 const authRouts = [
   {
@@ -100,6 +101,11 @@ const appRouts = [
     path: paths.userProfile,
     exact: true,
     Component: UserProfile,
+  },
+  {
+    path: paths.notices,
+    exact: true,
+    Component: Notices,
   },
 ];
 

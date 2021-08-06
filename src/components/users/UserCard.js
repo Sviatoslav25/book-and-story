@@ -34,7 +34,7 @@ export default function UserCard({ refetchUsers, user }) {
     subscribe({ variables: { authorId } });
   };
   return (
-    <Row key={user._id}>
+    <Row>
       <Col className="mt-3">
         <Link
           to={generatePath(paths.userProfile, { id: user._id })}
@@ -65,7 +65,7 @@ export default function UserCard({ refetchUsers, user }) {
                       onUnsubscribe(user.userId);
                     }}
                   >
-                    Unsubscribe
+                    Unfollow
                   </ButtonWithSpinner>
                 ) : (
                   <ButtonWithSpinner
@@ -79,7 +79,7 @@ export default function UserCard({ refetchUsers, user }) {
                       onSubscribe(user.userId);
                     }}
                   >
-                    Subscribe
+                    Follow
                   </ButtonWithSpinner>
                 )}
               </div>

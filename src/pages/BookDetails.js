@@ -56,13 +56,8 @@ export default function BookDetails() {
       ) : (
         <>
           <Row>
-            <Col md={5}>
-              <Image
-                src={book.img}
-                alt={book.name}
-                rounded
-                style={{ width: 'auto', maxHeight: 300, objectFit: 'cover' }}
-              />
+            <Col lg="3" md="4" sm="4" xs="5">
+              <Image src={book.img} alt={book.name} rounded style={{ width: '250px', objectFit: 'cover' }} />
             </Col>
             <Col>
               <Card border="light">
