@@ -31,7 +31,6 @@ export default function UserCard({ refetchUsers, user }) {
   };
 
   const onSubscribe = (authorId) => {
-    console.log(authorId);
     subscribe({ variables: { authorId } });
   };
   return (
