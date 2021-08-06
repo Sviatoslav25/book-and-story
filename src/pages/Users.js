@@ -1,12 +1,11 @@
 import React from 'react';
-import { Card, Col, Container, Row, Alert, Image } from 'react-bootstrap';
-import { generatePath, Link } from 'react-router-dom';
-import { PROFILE_PHOTO } from '../constants/settings';
+import { Container, Alert } from 'react-bootstrap';
 import useProfiles from '../hooks/useProfiles';
-import paths from '../router/paths';
+import UserCard from '../components/users/UserCard';
 
 export default function Users() {
-  const [users, { loading: isLoading, error }] = useProfiles();
+  const [users, { loading: isLoading, error, refetch: refetchUsers }] = useProfiles();
+
   if (error) {
     return (
       <Container className="mt-4">
@@ -22,39 +21,7 @@ export default function Users() {
   return (
     <Container className="mt-5">
       {users.map((user) => {
-        return (
-          <Row key={user._id}>
-            <Col className="mt-3">
-              <Link
-                to={generatePath(paths.userProfile, { id: user._id })}
-                style={{ color: 'inherit', textDecoration: 'inherit' }}
-              >
-                <Card>
-                  <Card.Body style={{ display: 'grid', gridTemplateColumns: '100px 1fr' }}>
-                    <div>
-                      <Image
-                        src={user.profilePhoto || PROFILE_PHOTO}
-                        alt="Profile photo"
-                        roundedCircle
-                        style={{
-                          maxWidth: '80px',
-                          height: 'auto',
-                          objectFit: 'cover',
-                        }}
-                      />
-                    </div>
-                    <div>
-                      <Card.Title>{user.nickname || user.email || 'none'}</Card.Title>
-                      <Card.Text>
-                        <strong>About myself:</strong> {user.aboutMyself || 'none'}
-                      </Card.Text>
-                    </div>
-                  </Card.Body>
-                </Card>
-              </Link>
-            </Col>
-          </Row>
-        );
+        return <UserCard key={user._id} user={user} refetchUsers={refetchUsers} />;
       })}
     </Container>
   );

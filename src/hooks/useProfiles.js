@@ -5,10 +5,12 @@ const profilesQuery = gql`
   query profiles {
     profiles {
       _id
+      userId
       nickname
       email
       profilePhoto
       aboutMyself
+      isFollowed
     }
   }
 `;
