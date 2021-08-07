@@ -1,4 +1,4 @@
-import { Container, Nav, Navbar } from 'react-bootstrap';
+import { Badge, Container, Nav, Navbar } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
@@ -8,6 +8,7 @@ import useLogout from '../../hooks/useLogout';
 import paths from '../../router/paths';
 import AuthManager from '../../services/AuthManager';
 import ButtonWithSpinner from '../common/ButtonWithSpinner';
+import useNoticeQuantity from '../../hooks/useNoticeQuantity';
 
 export default function AppLayout({ children }) {
   const [user] = useCurrentUser();
@@ -19,6 +20,7 @@ export default function AppLayout({ children }) {
       AuthManager.logout();
     },
   });
+  const [noticeQuantity] = useNoticeQuantity();
 
   const onLogout = () => {
     logout({ variables: { token: AuthManager.getRefreshToken() } });
@@ -48,11 +50,12 @@ export default function AppLayout({ children }) {
           </Nav.Link>
         </Nav>
         <Nav>
-          <Nav.Link as={Link} to={paths.myProfile} className="mr-2 mt-1">
+          <Nav.Link as={Link} to={paths.myProfile}>
             {user?.email}
           </Nav.Link>
-          <Nav.Link as={Link} to={paths.notices} className="mr-2 mt-1">
-            <FontAwesomeIcon icon={faExclamationCircle} />
+          <Nav.Link as={Link} to={paths.notices} style={noticeQuantity === 0 ? {} : { color: 'green' }}>
+            <FontAwesomeIcon icon={faExclamationCircle} size="lg" />
+            <Badge bg="secondary">{noticeQuantity}</Badge>
           </Nav.Link>
           <ButtonWithSpinner loading={isLoading} variant="outline-secondary" onClick={onLogout}>
             logout

@@ -1,7 +1,5 @@
 import React from 'react';
 import { Container, Alert } from 'react-bootstrap';
-import useProfiles from '../hooks/useProfiles';
-import UserCard from '../components/users/UserCard';
 import NoticeCard from '../components/notices/NoticeCard';
 import useNotice from '../hooks/useNotice';
 

@@ -6,6 +6,7 @@ const noticeQuery = gql`
     noticesAboutBookReleased {
       _id
       bookId
+      isRead
       book {
         name
         img
