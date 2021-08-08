@@ -64,7 +64,7 @@ export default function StoryDetails() {
               style={{ width: '100%', maxHeight: 300, objectFit: 'cover' }}
             />
           </Col>
-          <Col>
+          <Col lg="9" md="8" sm="8" xs="7">
             <Card border="light">
               <Card.Body>
                 <Card.Title
@@ -95,16 +95,18 @@ export default function StoryDetails() {
               </Card.Body>
             </Card>
           </Col>
-          <Card className="mt-5">
-            <Card.Body>
-              <Card.Title>Description</Card.Title>
-              <Card.Text>{story.shortDescription}</Card.Text>
-            </Card.Body>
-            <Card.Body className="mt-5">
-              <Card.Title>Story</Card.Title>
-              <Card.Text>{story.story}</Card.Text>
-            </Card.Body>
-          </Card>
+          <Col>
+            <Card className="mt-5">
+              <Card.Body>
+                <Card.Title>Description</Card.Title>
+                <Card.Text>{story.shortDescription}</Card.Text>
+              </Card.Body>
+              <Card.Body className="mt-5">
+                <Card.Title>Story</Card.Title>
+                <Card.Text>{story.story}</Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
         </Row>
       )}
     </Container>

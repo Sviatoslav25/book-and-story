@@ -5,12 +5,13 @@ import { faExclamationCircle, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { toast } from 'react-toastify';
 import { generatePath, Link } from 'react-router-dom';
 import paths from '../../router/paths';
-import useReadNoticeForBook from '../../hooks/useReadNoticeForBook';
+import useReadNotice from '../../hooks/useReadNotice';
 import NoticeManager from '../../services/NoticeManager';
 import useRemoveNotice from '../../hooks/useRemoveNotice';
+import { BOOKS, STORY_PICTURE } from '../../constants/settings';
 
-export default function NoticeCard({ notice, refetch }) {
-  const [readNoticeForBook] = useReadNoticeForBook({
+export default function NoticeCard({ notice, refetch, nameItem }) {
+  const [readNoticeForBook] = useReadNotice(nameItem, {
     onError: (e) => {
       toast.error(e.message);
     },
@@ -19,7 +20,7 @@ export default function NoticeCard({ notice, refetch }) {
     },
   });
 
-  const [removeNotice, { loading: isRemoving }] = useRemoveNotice({
+  const [removeNotice, { loading: isRemoving }] = useRemoveNotice(nameItem, {
     onError: (e) => {
       toast.error(e.message);
     },
@@ -45,7 +46,9 @@ export default function NoticeCard({ notice, refetch }) {
             onReadNoticeForBook(notice._id);
           }}
           title="Read"
-          to={generatePath(paths.book, { id: notice.bookId })}
+          to={generatePath(nameItem === BOOKS ? paths.book : paths.story, {
+            id: nameItem === BOOKS ? notice.bookId : notice.storyId,
+          })}
           style={{ color: 'inherit', textDecoration: 'inherit' }}
         >
           <Card border={notice.isRead ? '' : 'success'}>
@@ -69,7 +72,7 @@ export default function NoticeCard({ notice, refetch }) {
             <Card.Body style={{ marginTop: '-6px', display: 'grid', gridTemplateColumns: '100px 1fr' }}>
               <div>
                 <Image
-                  src={notice.book.img}
+                  src={nameItem === BOOKS ? notice.book.img : STORY_PICTURE}
                   alt="Profile photo"
                   roundedCircle
                   style={{
@@ -82,7 +85,8 @@ export default function NoticeCard({ notice, refetch }) {
               <div>
                 <Card.Title style={{ display: 'grid', gridTemplateColumns: '1fr 20px' }}>
                   <div>
-                    <strong>Book name:</strong> {notice.book.name}
+                    {nameItem === BOOKS ? <strong>Book name:</strong> : <strong>Story name:</strong>}{' '}
+                    {nameItem === BOOKS ? notice.book.name : notice.story.name}
                   </div>
                   {!notice.isRead && <FontAwesomeIcon size="lg" color="green" icon={faExclamationCircle} />}
                 </Card.Title>
