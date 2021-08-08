@@ -3,12 +3,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useEffect } from 'react';
 import useCurrentUser from '../../hooks/useCurrentUser';
 import useLogout from '../../hooks/useLogout';
 import paths from '../../router/paths';
 import AuthManager from '../../services/AuthManager';
 import ButtonWithSpinner from '../common/ButtonWithSpinner';
 import useNoticeQuantity from '../../hooks/useNoticeQuantity';
+import NoticeManager from '../../services/NoticeManager';
 
 export default function AppLayout({ children }) {
   const [user] = useCurrentUser();
@@ -20,7 +22,14 @@ export default function AppLayout({ children }) {
       AuthManager.logout();
     },
   });
-  const [noticeQuantity] = useNoticeQuantity();
+  const [noticeQuantity, { refetch: refetchNoticeQuantity }] = useNoticeQuantity();
+
+  useEffect(() => {
+    const offSubscribe = NoticeManager.onNoticeQuantityChange(refetchNoticeQuantity);
+    return () => {
+      offSubscribe();
+    };
+  });
 
   const onLogout = () => {
     logout({ variables: { token: AuthManager.getRefreshToken() } });

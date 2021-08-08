@@ -4,7 +4,7 @@ import NoticeCard from '../components/notices/NoticeCard';
 import useNotice from '../hooks/useNotice';
 
 export default function Notices() {
-  const [notices, { loading: isLoading, error }] = useNotice();
+  const [notices, { loading: isLoading, error, refetch }] = useNotice();
 
   if (error) {
     return (
@@ -21,7 +21,7 @@ export default function Notices() {
   return (
     <Container className="mt-5">
       {notices.map((notice) => {
-        return <NoticeCard notice={notice} key={notice._id} />;
+        return <NoticeCard refetch={refetch} notice={notice} key={notice._id} />;
       })}
     </Container>
   );
