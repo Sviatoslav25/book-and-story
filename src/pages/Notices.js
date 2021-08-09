@@ -17,7 +17,7 @@ export default function Notices() {
   if (errorForBooks || errorForStories) {
     return (
       <Container className="mt-4">
-        <Alert variant="danger">{refetchNoticeForBooks?.message || errorForStories?.message}</Alert>
+        <Alert variant="danger">{errorForBooks?.message || errorForStories?.message}</Alert>
       </Container>
     );
   }

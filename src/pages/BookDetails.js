@@ -90,7 +90,7 @@ export default function BookDetails() {
                   </Card.Title>
                   <Card.Link href={book.bookURL}>Read</Card.Link>
                   <Card.Title>genre: {book.genre}</Card.Title>
-                  {book.isPaid && <Card.Title>{book.price}</Card.Title>}
+                  {book.isPaid && <Card.Title>Price: {book.price}</Card.Title>}
                   <Card.Title>Number of pages: {book.pagesQuantity}</Card.Title>
                   <RatingStart rating={book.rating} />
                   <Card.Text style={{ textAlign: 'right' }}>Author: {book.author.email}</Card.Text>

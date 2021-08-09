@@ -11,6 +11,7 @@ const noticesAboutBookReleasedQuery = gql`
       book {
         name
         img
+        isPrivate
       }
       author {
         nickname
@@ -28,6 +29,7 @@ const noticesAboutStoryReleasedQuery = gql`
       isRead
       story {
         name
+        isPrivate
       }
       author {
         nickname

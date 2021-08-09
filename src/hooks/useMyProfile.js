@@ -16,7 +16,7 @@ const myProfileQuery = gql`
 
 const useMyProfile = () => {
   const { loading, data, error, ...rest } = useQuery(myProfileQuery, { fetchPolicy: 'cache-and-network' });
-  return [getFirstResult(data) || [], { loading, error, ...rest }];
+  return [getFirstResult(data), { loading, error, ...rest }];
 };
 
 export default useMyProfile;

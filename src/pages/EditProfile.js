@@ -13,7 +13,7 @@ export default function EditProfile() {
   const [editProfile] = useUpdateProfile({
     onCompleted: () => {
       toast.success('Profile updated successfully');
-      history.push(paths.profile);
+      history.push(paths.myProfile);
     },
     onError: (e) => {
       toast.error(e.message);

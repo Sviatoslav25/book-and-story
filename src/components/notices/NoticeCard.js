@@ -9,6 +9,7 @@ import useReadNotice from '../../hooks/useReadNotice';
 import NoticeManager from '../../services/NoticeManager';
 import useRemoveNotice from '../../hooks/useRemoveNotice';
 import { BOOKS, STORY_PICTURE } from '../../constants/settings';
+import ButtonWithSpinner from '../common/ButtonWithSpinner';
 
 export default function NoticeCard({ notice, refetch, nameItem }) {
   const [readNoticeForBook] = useReadNotice(nameItem, {
@@ -37,6 +38,31 @@ export default function NoticeCard({ notice, refetch, nameItem }) {
   const onReadNoticeForBook = (noticeId) => {
     readNoticeForBook({ variables: { noticeId } });
   };
+  if (notice?.book?.isPrivate || notice?.story?.isPrivate) {
+    return (
+      <Row>
+        <Col className="mt-3">
+          <Card>
+            <Card.Body>
+              <Card.Title>{nameItem === BOOKS ? 'Book' : 'Story'} is Private</Card.Title>
+              <Card.Text>
+                <strong>Author:</strong> {notice.author.nickname || notice.author.email || 'none'}
+              </Card.Text>
+              <ButtonWithSpinner
+                loading={isRemoving}
+                onClick={() => {
+                  onRemoveNotice(notice._id);
+                }}
+                variant="danger"
+              >
+                Remove notice
+              </ButtonWithSpinner>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    );
+  }
 
   return (
     <Row>
