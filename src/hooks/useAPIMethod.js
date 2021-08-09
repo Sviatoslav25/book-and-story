@@ -34,7 +34,6 @@ const useAPIMethod = ({ onComplete = noop, url, method = 'post', onError = noop,
           await callbacksRef.current.onComplete(result.data);
         }
       } catch (e) {
-        console.log(e);
         callbacksRef.current.onError(e);
       } finally {
         setIsLoading(false);

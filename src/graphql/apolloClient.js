@@ -15,7 +15,7 @@ const tokenRefreshLink = new TokenRefreshLink({
     await APIService.refreshToken();
     return { token: AuthManager.getAccessToken() };
   },
-  handleFetch: () => console.log('refreshed a token with apollo TokenRefreshLink'),
+  handleFetch: () => {},
   handleResponse: () => (response) => {
     return response;
   },
