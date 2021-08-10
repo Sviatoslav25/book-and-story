@@ -20,10 +20,10 @@ export default function ModalDialog({
       </Modal.Header>
       <Modal.Body>{bodyText}</Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={onClose}>
+        <Button variant="outline-secondary" onClick={onClose}>
           {closeButtonText}
         </Button>
-        <Button variant="danger" onClick={confirmed}>
+        <Button variant="outline-primary" onClick={confirmed}>
           {confirmButtonText}
         </Button>
       </Modal.Footer>

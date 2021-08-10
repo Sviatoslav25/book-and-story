@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Card, Form } from 'react-bootstrap';
+import { Button, Card, Form } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import paths from '../../router/paths';
 import { EmailValidator, PasswordValidator } from '../../utils/validators/Validator';
 import ButtonWithSpinner from '../common/ButtonWithSpinner';
 
@@ -57,7 +59,12 @@ export default function AuthForm({ Submit, isLoginForm, isLoading }) {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Card.Title>Sign in</Card.Title>
+      <Card.Title>
+        {isLoginForm ? 'Sign in' : 'Sing up'}
+        <Link to={isLoginForm ? paths.signUp : paths.login} style={{ float: 'right' }}>
+          <Button variant="outline-info">{isLoginForm ? 'Sign up' : 'Sign in'}</Button>
+        </Link>
+      </Card.Title>
       <Form.Group controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
         <Form.Control
@@ -94,13 +101,14 @@ export default function AuthForm({ Submit, isLoginForm, isLoading }) {
         </Form.Group>
       ) : null}
       <ButtonWithSpinner
+        className="mt-2"
         loading={isLoading}
         disabled={!isValidatedEmail || !isValidatedPassword || !email || !password || isLoading || false}
         variant="primary"
         type="submit"
         block
       >
-        Submit
+        {isLoginForm ? 'Login' : 'Sign up'}
       </ButtonWithSpinner>
     </Form>
   );

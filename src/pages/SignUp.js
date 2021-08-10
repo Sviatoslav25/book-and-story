@@ -1,9 +1,7 @@
 import { gql, useMutation } from '@apollo/client';
-import { Button, Card, Col, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Card, Col, Row } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import AuthForm from '../components/auth/AuthForm';
-import paths from '../router/paths';
 import AuthManager from '../services/AuthManager';
 import { getFirstResult } from '../utils/graphql';
 
@@ -40,9 +38,6 @@ export default function SingUp() {
       <Col lg={{ span: 6, offset: 3 }} md={{ span: 8, offset: 2 }} sm={{ span: 8 }}>
         <Card>
           <Card.Body>
-            <Link to={paths.login} className="float-right">
-              <Button variant="outline-primary">Sing in</Button>
-            </Link>
             <AuthForm Submit={Submit} isLoading={isRegistrationIn} />
           </Card.Body>
         </Card>

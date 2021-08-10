@@ -62,9 +62,6 @@ export default function BookForm({ textSubmitButton = 'Add book', onSubmit, init
           <FormikFormGroup label="Image URL">
             <FormikFormControl name="img" placeholder="Enter url" required type="url" />
           </FormikFormGroup>
-          {/* <FormikFormGroup label="Book release date">
-            <FormikFormControl name="releaseDate" placeholder="Enter book release date" required type="date" />
-          </FormikFormGroup> */}
           <FormikFormGroup label="Book genre">
             <FormikFormControl name="genre" placeholder="Enter the genre of the book" required />
           </FormikFormGroup>
@@ -95,7 +92,7 @@ export default function BookForm({ textSubmitButton = 'Add book', onSubmit, init
           <FormikFormGroup label="Description of the book">
             <FormikTextAreaField name="description" required />
           </FormikFormGroup>
-          <ButtonWithSpinner type="submit" block loading={isSubmitting}>
+          <ButtonWithSpinner className="mt-3" type="submit" loading={isSubmitting}>
             {textSubmitButton}
           </ButtonWithSpinner>
         </FormikForm>

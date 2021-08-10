@@ -20,6 +20,7 @@ const bookQuery = gql`
       }
       rating
       isFavorite
+      isPrivate
     }
   }
 `;

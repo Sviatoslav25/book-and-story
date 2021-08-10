@@ -35,15 +35,18 @@ export default function FormikInputArray({ name, label, formControlProps = {}, a
               <ErrorMessage name={`${name}.${index}`} component={FieldError} />
             </Form.Group>
           ))}
-          <Button
-            block
-            type="button"
-            onClick={() => {
-              arrayHelpers.push('');
-            }}
-          >
-            {addItemButtonLabel}
-          </Button>
+          <div>
+            <Button
+              size="sm"
+              block
+              type="button"
+              onClick={() => {
+                arrayHelpers.push('');
+              }}
+            >
+              {addItemButtonLabel}
+            </Button>
+          </div>
         </Form.Group>
       )}
     />

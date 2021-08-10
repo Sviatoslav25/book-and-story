@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Col, Image, Row, Spinner } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExclamationCircle, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faExclamationCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
 import { generatePath, Link } from 'react-router-dom';
 import paths from '../../router/paths';
@@ -42,7 +42,7 @@ export default function NoticeCard({ notice, refetch, nameItem }) {
     return (
       <Row>
         <Col className="mt-3">
-          <Card>
+          <Card bg="danger">
             <Card.Body>
               <Card.Title>{nameItem === BOOKS ? 'Book' : 'Story'} is Private</Card.Title>
               <Card.Text>
@@ -53,7 +53,7 @@ export default function NoticeCard({ notice, refetch, nameItem }) {
                 onClick={() => {
                   onRemoveNotice(notice._id);
                 }}
-                variant="danger"
+                variant="outline-primary"
               >
                 Remove notice
               </ButtonWithSpinner>
@@ -77,7 +77,7 @@ export default function NoticeCard({ notice, refetch, nameItem }) {
           })}
           style={{ color: 'inherit', textDecoration: 'inherit' }}
         >
-          <Card border={notice.isRead ? '' : 'success'}>
+          <Card dg={notice.isRead ? '' : 'success'}>
             <div title="remove" style={{ marginTop: '-12px', marginRight: '-8px' }}>
               {isRemoving ? (
                 <Spinner style={{ float: 'right', color: 'gray' }} animation="border" variant="secondary" />
@@ -89,9 +89,9 @@ export default function NoticeCard({ notice, refetch, nameItem }) {
                     e.nativeEvent.stopImmediatePropagation();
                     onRemoveNotice(notice._id);
                   }}
-                  style={{ float: 'right', color: 'gray' }}
+                  style={{ float: 'right' }}
                   size="lg"
-                  icon={faTimes}
+                  icon={faTimesCircle}
                 />
               )}
             </div>
@@ -114,7 +114,7 @@ export default function NoticeCard({ notice, refetch, nameItem }) {
                     {nameItem === BOOKS ? <strong>Book name:</strong> : <strong>Story name:</strong>}{' '}
                     {nameItem === BOOKS ? notice.book.name : notice.story.name}
                   </div>
-                  {!notice.isRead && <FontAwesomeIcon size="lg" color="green" icon={faExclamationCircle} />}
+                  {!notice.isRead && <FontAwesomeIcon size="lg" color="#2EE22E" icon={faExclamationCircle} />}
                 </Card.Title>
                 <Card.Text>
                   <strong>Author:</strong> {notice.author.nickname || notice.author.email || 'none'}

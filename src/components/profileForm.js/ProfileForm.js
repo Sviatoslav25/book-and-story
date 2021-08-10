@@ -60,7 +60,7 @@ export default function ProfileForm({ textSubmitButton = 'Edit profile informati
           <FormikFormGroup label="About myself">
             <FormikTextAreaField name="aboutMyself" />
           </FormikFormGroup>
-          <ButtonWithSpinner type="submit" block loading={isSubmitting}>
+          <ButtonWithSpinner className="mt-2" type="submit" block loading={isSubmitting}>
             {textSubmitButton}
           </ButtonWithSpinner>
         </FormikForm>

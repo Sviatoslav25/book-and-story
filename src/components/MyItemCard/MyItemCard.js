@@ -52,7 +52,7 @@ export default function MyItemCard({ item, refetchItems, nameItem }) {
 
   return (
     <>
-      <Card border={item.isPrivate && 'danger'}>
+      <Card bg={item.isPrivate ? 'danger' : ''}>
         {isVisibleModalDialogToDelete ? (
           <ModalDialog
             show={isVisibleModalDialogToDelete}
@@ -105,8 +105,8 @@ export default function MyItemCard({ item, refetchItems, nameItem }) {
           </Card.Title>
           <Card.Text>{nameItem === BOOKS ? item.description : item.shortDescription}</Card.Text>
           <ButtonWithSpinner
+            variant="outline-primary"
             loading={isDeleting}
-            variant="outline-danger"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -117,7 +117,7 @@ export default function MyItemCard({ item, refetchItems, nameItem }) {
             <FontAwesomeIcon icon={faTrash} />
           </ButtonWithSpinner>
           <Link to={generatePath(nameItem === BOOKS ? paths.editBook : paths.editStory, { id: item._id })}>
-            <ButtonWithSpinner className="ml-3" variant="outline-success">
+            <ButtonWithSpinner style={{ marginLeft: '20px' }} variant="outline-success">
               <FontAwesomeIcon icon={faEdit} />
             </ButtonWithSpinner>
           </Link>

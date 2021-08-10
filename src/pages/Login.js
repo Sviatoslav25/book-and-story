@@ -1,10 +1,8 @@
 import React from 'react';
-import { Button, Card, Col, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Card, Col, Row } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import AuthForm from '../components/auth/AuthForm';
 import useLogin from '../hooks/useLogin';
-import paths from '../router/paths';
 import AuthManager from '../services/AuthManager';
 import { getFirstResult } from '../utils/graphql';
 
@@ -27,9 +25,6 @@ export default function Login() {
       <Col lg={{ span: 6, offset: 3 }} md={{ span: 8, offset: 2 }} sm={{ span: 8 }}>
         <Card>
           <Card.Body>
-            <Link to={paths.signUp} className="float-right">
-              <Button variant="outline-primary">Sing up</Button>
-            </Link>
             <AuthForm Submit={Submit} isLoading={isLoginIn} isLoginForm />
           </Card.Body>
         </Card>

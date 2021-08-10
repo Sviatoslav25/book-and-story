@@ -19,15 +19,17 @@ export default function BookCard({ book, addRating, isUpdate }) {
           <Card.Text>{book.description}</Card.Text>
         </Card.Body>
       </Link>
-      {isUpdate ? (
-        <div>loading...</div>
-      ) : (
-        <>
-          {' '}
-          {book.userCanAddRating && <ChangeRatingStart ChangeRating={addBookIdForChangeRating} />}
-          <RatingStart rating={book.rating} />
-        </>
-      )}
+      <Card.Body>
+        {isUpdate ? (
+          <div>loading...</div>
+        ) : (
+          <>
+            {' '}
+            {book.userCanAddRating && <ChangeRatingStart ChangeRating={addBookIdForChangeRating} />}
+            <RatingStart rating={book.rating} />
+          </>
+        )}
+      </Card.Body>
     </Card>
   );
 }
