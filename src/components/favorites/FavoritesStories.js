@@ -2,7 +2,7 @@ import React from 'react';
 import { Alert, Button, Col, Container, Row } from 'react-bootstrap';
 import { STORIES } from '../../constants/settings';
 import useFavoritesStories from '../../hooks/useFavoritesStories';
-import FavoritesItemsCard from './FavoritesItemsCard';
+import FavoritesItemsCard from '../itemCard/ItemsCardWithoutChangeRating';
 
 export default function FavoritesStories({ switchToFavoritesBooks }) {
   const [favoritesStories, { loading: isLoading, error }] = useFavoritesStories();

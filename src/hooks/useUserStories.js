@@ -1,9 +1,9 @@
 import { gql, useQuery } from '@apollo/client';
 import { getFirstResult } from '../utils/graphql';
 
-const favoritesStoriesQuery = gql`
-  query favoritesStories {
-    favoritesStories {
+const userStoriesQuery = gql`
+  query userStories($userId: ID!) {
+    userStories(userId: $userId) {
       _id
       name
       shortDescription
@@ -12,12 +12,12 @@ const favoritesStoriesQuery = gql`
   }
 `;
 
-const useFavoritesStories = (options) => {
-  const { loading, data, error, ...rest } = useQuery(favoritesStoriesQuery, {
+const useUserStories = (userId) => {
+  const { loading, data, error, ...rest } = useQuery(userStoriesQuery, {
+    variables: { userId },
     fetchPolicy: 'cache-and-network',
-    ...options,
   });
   return [getFirstResult(data) || [], { loading, error, ...rest }];
 };
 
-export default useFavoritesStories;
+export default useUserStories;

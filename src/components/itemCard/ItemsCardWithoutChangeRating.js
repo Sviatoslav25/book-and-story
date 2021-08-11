@@ -2,6 +2,7 @@ import { Card } from 'react-bootstrap';
 import { generatePath, Link } from 'react-router-dom';
 import { BOOKS, STORY_PICTURE } from '../../constants/settings';
 import paths from '../../router/paths';
+import RatingStart from '../RatingStar/RatingStart';
 
 export default function FavoriteItemCard({ nameItem, item }) {
   return (
@@ -14,6 +15,7 @@ export default function FavoriteItemCard({ nameItem, item }) {
         <Card.Body>
           <Card.Title>{item.name}</Card.Title>
           <Card.Text>{nameItem === BOOKS ? item.description : item.shortDescription}</Card.Text>
+          <RatingStart rating={item.rating} />
         </Card.Body>
       </Link>
     </Card>

@@ -3,6 +3,8 @@ class ShowBookOrStoriesManager {
 
   _isFavoritesBooks = true;
 
+  _isUserBooks = true;
+
   isShowBooks() {
     return this._isBooks;
   }
@@ -11,12 +13,20 @@ class ShowBookOrStoriesManager {
     return this._isFavoritesBooks;
   }
 
+  isShowUserBooks() {
+    return this._isUserBooks;
+  }
+
   setIsFavoritesBooks(status) {
     this._isFavoritesBooks = status;
   }
 
   setIsBooks(status) {
     this._isBooks = status;
+  }
+
+  setIsUserBooks(status) {
+    this._isUserBooks = status;
   }
 }
 

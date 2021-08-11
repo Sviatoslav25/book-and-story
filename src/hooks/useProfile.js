@@ -10,6 +10,7 @@ const profileQuery = gql`
       email
       phoneNumber
       aboutMyself
+      userId
     }
   }
 `;

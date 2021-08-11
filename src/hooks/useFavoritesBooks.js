@@ -8,6 +8,7 @@ const favoritesBooksQuery = gql`
       name
       description
       img
+      rating
     }
   }
 `;

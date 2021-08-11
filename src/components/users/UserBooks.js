@@ -1,13 +1,13 @@
 import React from 'react';
 import { Alert, Col, Container, Row, Button } from 'react-bootstrap';
 import { BOOKS } from '../../constants/settings';
-import useFavoritesBooks from '../../hooks/useFavoritesBooks';
-import FavoritesItemsCard from '../itemCard/ItemsCardWithoutChangeRating';
+import useUserBooks from '../../hooks/useUserBooks';
+import ItemsCardWithoutChangeRating from '../itemCard/ItemsCardWithoutChangeRating';
 
-export default function FavoritesBooks({ switchToFavoritesStories }) {
-  const [favoritesBooks, { loading: isLoading, error }] = useFavoritesBooks();
+export default function UserBooks({ switchToUserStories, userId }) {
+  const [userBooks, { loading: isLoading, error }] = useUserBooks(userId);
 
-  if (isLoading && !favoritesBooks) {
+  if (isLoading && !userBooks) {
     return <div>Loading...</div>;
   }
 
@@ -18,13 +18,13 @@ export default function FavoritesBooks({ switchToFavoritesStories }) {
   return (
     <>
       <Container className="mt-3">
-        <Button onClick={switchToFavoritesStories}>Favorite Stories</Button>
+        <Button onClick={switchToUserStories}>Stories</Button>
       </Container>
       <Row>
-        {favoritesBooks?.map((book) => {
+        {userBooks?.map((book) => {
           return (
             <Col key={book._id} lg="3" md="4" sm="6" xs="6" className="mt-4">
-              <FavoritesItemsCard nameItem={BOOKS} item={book} />
+              <ItemsCardWithoutChangeRating nameItem={BOOKS} item={book} />
             </Col>
           );
         })}

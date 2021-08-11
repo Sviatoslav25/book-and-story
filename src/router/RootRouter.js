@@ -14,7 +14,7 @@ import MyStories from '../pages/MyStories';
 import SignUp from '../pages/SignUp';
 import StoryDetails from '../pages/StoryDetails';
 import AuthManager from '../services/AuthManager';
-import Favorites from '../components/favorites/Favorites';
+import Favorites from '../pages/Favorites';
 import paths from './paths';
 import MyProfile from '../pages/MyProfile';
 import EditProfile from '../pages/EditProfile';
