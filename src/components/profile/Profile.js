@@ -63,13 +63,9 @@ export default function Profile({ error, isLoading, profile, isMyProfile }) {
                       }`}</span>
                     )}
                     {isLoadingFollowingQuantity ? (
-                      <Spinner
-                        style={{ marginLeft: '40px', fontSize: '20px' }}
-                        animation="border"
-                        variant="secondary"
-                      />
+                      <Spinner style={{ marginLeft: '40px' }} animation="border" variant="secondary" />
                     ) : (
-                      <span style={{ marginLeft: '40px' }}>{`Following: ${
+                      <span style={{ marginLeft: '40px', fontSize: '20px' }}>{`Following: ${
                         followingQuantity === null ? '' : followingQuantity
                       }`}</span>
                     )}
