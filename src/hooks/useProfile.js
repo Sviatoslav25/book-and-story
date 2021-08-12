@@ -20,7 +20,7 @@ const useProfile = (profileId) => {
     fetchPolicy: 'cache-and-network',
     variables: { profileId },
   });
-  return [getFirstResult(data) || [], { loading, error, ...rest }];
+  return [getFirstResult(data), { loading, error, ...rest }];
 };
 
 export default useProfile;

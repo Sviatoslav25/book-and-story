@@ -31,10 +31,10 @@ export default function MyStories() {
             <span className="sr-only">Loading...</span>
           </>
         ) : null}
-        add story(Random Data)
+        Add story(Random Data)
       </Button>
-      <Link to={paths.addStory}>
-        <Button>add story</Button>
+      <Link style={{ marginLeft: '20px' }} to={paths.addStory}>
+        <Button>Add story</Button>
       </Link>
       {error && <Alert variant="danger">{error.message}</Alert>}
       {isLoading ? (

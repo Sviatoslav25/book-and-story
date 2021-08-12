@@ -5,7 +5,6 @@ import { toast } from 'react-toastify';
 import paths from '../../router/paths';
 import Search from '../search/Search';
 import StoryCard from '../story/StoryCard';
-import style from './StoryList.module.scss';
 import ItemsFound from '../ItemsFound/ItemsFound';
 import MockDataService from '../../services/MockDataService';
 import useStories from '../../hooks/useStories';
@@ -66,7 +65,7 @@ export default function StoryList({ switchToBooks }) {
         />
         <Button onClick={switchToBooks}>Books</Button>
         <Button
-          className={style.addButton}
+          style={{ float: 'right' }}
           onClick={() => {
             addStory({ variables: { input: MockDataService.createStory() } });
           }}
@@ -80,8 +79,8 @@ export default function StoryList({ switchToBooks }) {
           ) : null}
           Add story(Random Data)
         </Button>
-        <Link to={paths.addStory}>
-          <Button className={style.addButton}>Add story</Button>
+        <Link style={{ float: 'right', marginRight: '20px' }} to={paths.addStory}>
+          <Button>Add story</Button>
         </Link>
       </Container>
       {error ? <Alert variant="danger">{error.message}</Alert> : null}

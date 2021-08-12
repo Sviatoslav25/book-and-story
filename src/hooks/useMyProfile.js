@@ -4,6 +4,7 @@ import { getFirstResult } from '../utils/graphql';
 const myProfileQuery = gql`
   query myProfile {
     myProfile {
+      userId
       nickname
       profilePhoto
       fullName

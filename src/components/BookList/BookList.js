@@ -6,7 +6,6 @@ import paths from '../../router/paths';
 import MockDataService from '../../services/MockDataService';
 import BookCard from '../book/BookCard';
 import Search from '../search/Search';
-import style from './BookList.module.scss';
 import ItemsFound from '../ItemsFound/ItemsFound';
 import ButtonWithSpinner from '../common/ButtonWithSpinner';
 import useAddBooks from '../../hooks/useAddBook';
@@ -69,7 +68,7 @@ export default function BookList({ switchToStories }) {
         />
         <Button onClick={switchToStories}>Stories</Button>
         <ButtonWithSpinner
-          className={style.addButton}
+          style={{ float: 'right' }}
           onClick={() => {
             addBook({ variables: { input: MockDataService.createBook() } });
           }}
@@ -77,8 +76,8 @@ export default function BookList({ switchToStories }) {
         >
           Add book(Random Data)
         </ButtonWithSpinner>
-        <Link to={paths.addBook}>
-          <Button className={style.addButton}>Add book</Button>
+        <Link style={{ float: 'right', marginRight: '20px' }} to={paths.addBook}>
+          <Button>Add book</Button>
         </Link>
         {error && !isBooksFound ? <Alert variant="danger">{error.message}</Alert> : null}
       </Container>

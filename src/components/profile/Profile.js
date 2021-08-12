@@ -1,11 +1,24 @@
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Card, Container, Alert, Row, Col, ListGroupItem, ListGroup } from 'react-bootstrap';
+import { Card, Container, Alert, Row, Col, ListGroupItem, ListGroup, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { PROFILE_PHOTO } from '../../constants/settings';
+import useFollowersQuantity from '../../hooks/useFollowersQuantity';
+import useFollowingQuantity from '../../hooks/useFollowingQuantity';
 import paths from '../../router/paths';
 
 export default function Profile({ error, isLoading, profile, isMyProfile }) {
+  const [followersQuantity, { loading: isLoadingFollowerQuantity }] = useFollowersQuantity(profile.userId, {
+    onError: (e) => {
+      toast.error(e.message);
+    },
+  });
+  const [followingQuantity, { loading: isLoadingFollowingQuantity }] = useFollowingQuantity(profile.userId, {
+    onError: (e) => {
+      toast.error(e.message);
+    },
+  });
   if (error) {
     return (
       <Container className="mt-4">
@@ -38,11 +51,31 @@ export default function Profile({ error, isLoading, profile, isMyProfile }) {
             <Card>
               <Card.Body>
                 <Card.Title
-                  style={{ fontSize: '25px', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}
+                  style={{ fontSize: '25px', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}
                 >
-                  {profile.nickname || 'none'}
+                  <div>
+                    {profile.nickname || 'none'}
+                    {isLoadingFollowerQuantity ? (
+                      <Spinner style={{ marginLeft: '40px' }} animation="border" variant="secondary" />
+                    ) : (
+                      <span style={{ marginLeft: '40px', fontSize: '20px' }}>{`Followers: ${
+                        followersQuantity === null ? '' : followersQuantity
+                      }`}</span>
+                    )}
+                    {isLoadingFollowingQuantity ? (
+                      <Spinner
+                        style={{ marginLeft: '40px', fontSize: '20px' }}
+                        animation="border"
+                        variant="secondary"
+                      />
+                    ) : (
+                      <span style={{ marginLeft: '40px' }}>{`Following: ${
+                        followingQuantity === null ? '' : followingQuantity
+                      }`}</span>
+                    )}
+                  </div>
                   {isMyProfile && (
-                    <Link style={{ marginLeft: 'auto', marginRight: '5px', cursor: 'pointer' }} to={paths.editProfile}>
+                    <Link style={{ cursor: 'pointer' }} to={paths.editProfile}>
                       <FontAwesomeIcon title="Edit profile information" icon={faCog} />
                     </Link>
                   )}

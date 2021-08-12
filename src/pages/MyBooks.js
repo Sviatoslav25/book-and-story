@@ -34,10 +34,10 @@ export default function MyBooks() {
             <span className="sr-only">Loading...</span>
           </>
         ) : null}
-        addBook(Random Data)
+        Add book(Random Data)
       </Button>
-      <Link to={paths.addBook}>
-        <Button>addBook</Button>
+      <Link style={{ marginLeft: '20px' }} to={paths.addBook}>
+        <Button>Add book</Button>
       </Link>
       {error && <Alert variant="danger">{error.message}</Alert>}
       {isLoading ? (
